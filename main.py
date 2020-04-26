@@ -56,7 +56,7 @@ class Tag(Base):
     __tablename__ = 'tags'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(10), nullable=False)
+    name = Column(String(20), nullable=False)
     # make link from Tag to Post
     posts = relationship('Post', secondary=posts_tags_table, back_populates='tags')
 
@@ -81,6 +81,23 @@ def create_users_posts():
     session.add(post2)
     session.add(post3)
     # Вносим данные в БД и закрываем сессию
+    session.commit()
+    session.close()
+
+
+# create standard tags in DB
+def create_standard_tags():
+    session = Session()
+    tag1 = Tag(name='комедия')
+    tag2 = Tag(name='боевик')
+    tag3 = Tag(name='ужасы')
+    tag4 = Tag(name='мультфильм')
+    tag5 = Tag(name='документалка')
+    session.add(tag1)
+    session.add(tag2)
+    session.add(tag3)
+    session.add(tag4)
+    session.add(tag5)
     session.commit()
     session.close()
 
@@ -184,6 +201,7 @@ def show_methods():
     #
     # res_username = q_user.scalar()
     # print('username:', res_username)
+    session.close()
 
 
 # Делаем проверку наличия БД в текущей папке
@@ -198,6 +216,7 @@ def main():
     if not path_to_db:
         Base.metadata.create_all()
         create_users_posts()
+    create_standard_tags()
     show_existing_tags()
     add_tags_to_posts()
     show_join()
@@ -206,18 +225,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

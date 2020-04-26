@@ -1,4 +1,5 @@
 from main import User, Post, Tag
+import sqlite3
 import pytest
 import os.path
 import datetime
@@ -26,23 +27,51 @@ def is_file_exists():
 
 
 class TestBlog:
-    def is_base_exists(self):
+
+    @pytest.mark.parametrize(
+        'args, expected_result',
+        [
+            pytest.param(
+                ('test_blog.py'), ('wrong_file.py')
+            ),
+            pytest.param(
+                ('myblog.db'), ('myblog.db')
+            )
+        ]
+    )
+
+    def test_is_file_exists(self, args, expected_result):
+        # path_db = 'test_blog.py'
+        if str(args) == str(pathlib.Path(args)):
+            print('Файл с указанным именем', args, 'в наличии!')
+        else:
+            print('Указанного файла', args, 'нет на диске!')
+
+    def test_file_correct(self):
         path_db = 'myblog.db'
-        assert path_db == expected_db_path
-#
-#     def test_db_contains(self, args, expected_result):
+        if str(path_db) == str(expected_db_path):
+            print('Имя файла', path_db, 'верно!')
+        else:
+            print('Имя файла', path_db, 'неверно!')
+
+    def test_connect_to_db(self):
+        path = 'myblog.db'
+        if path == expected_db_path:
+            conn = sqlite3.connect(path)
+            cursor = conn.cursor()
+            cursor.execute("SELECT title FROM Post WHERE post.id = 1")
+            results = cursor.fetchall()
+            print(results)
+        else:
+            print('Подключение к БД не удалось!')
+
+
+#     def test_is_posts_exists(self, args):
 #         pass
 #
-#     def test_is_user_exsists(self, args):
-#         pass
-#
-#     def test_is_posts_exsists(self, args):
-#         pass
-#
-#     def test_is_tags_exsists(self, args):
+#     def test_is_tags_exists(self, args):
 #         pass
 
 
 if __name__ == '__main__':
     TestBlog
-    is_file_exists()
