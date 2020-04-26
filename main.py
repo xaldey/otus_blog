@@ -1,12 +1,14 @@
 from sqlalchemy import create_engine, Column, Integer, String, Text, Boolean, ForeignKey, Table, or_
 from sqlalchemy.orm import relationship, sessionmaker, scoped_session, joinedload
 from sqlalchemy.ext.declarative import declarative_base
+import pathlib
 
 engine = create_engine('sqlite:///myblog.db')
 Base = declarative_base(bind=engine)
 
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
+
 
 # Make outer table for link within posts and tags
 # both posts and tags are primary keys
@@ -16,6 +18,7 @@ posts_tags_table = Table(
     Column('post_id', Integer, ForeignKey('posts.id'), primary_key=True),
     Column('tag_id', Integer, ForeignKey('tags.id'), primary_key=True),
 )
+
 
 # make class for POSTS
 class User(Base):
@@ -28,6 +31,7 @@ class User(Base):
 
     def __repr__(self):
         return f'<User #{self.id} {self.username}>'
+
 
 # make class for Post
 class Post(Base):
@@ -46,6 +50,7 @@ class Post(Base):
     def __repr__(self):
         return f'<Post #{self.id} by {self.user_id} {self.title}>'
 
+
 # make class for Tags
 class Tag(Base):
     __tablename__ = 'tags'
@@ -57,6 +62,7 @@ class Tag(Base):
 
     def __repr__(self):
         return f'<Tag #{self.id} {self.name}>'
+
 
 # make func to create users and posts
 def create_users_posts():
@@ -86,34 +92,34 @@ def show_existing_tags():
     query_tags = session.query(Tag)
     # Show first tag
     tag = query_tags.first()
-    print(tag)
-    print(tag.posts)
+    # print(tag)
+    # print(tag.posts)
     # tags = query_tags.all()
     tags = list(query_tags)
     print(tags)
 
-    query_filter_by_id = query_tags.filter(
-        Tag.id > 2,
-    )
-    print(query_filter_by_id)
-    print(query_filter_by_id.all())
-    # Фильтруем теги по содержанию
-    a_and_by_contains = query_filter_by_id.filter(
-        Tag.name.contains('g'),
-    )
-    print(a_and_by_contains)
-    print(a_and_by_contains.all())
-    # Фильтрация тегов по требованию
-    # id > 2 & contains 'o'
-    q = query_tags.filter(
-        or_(
-            Tag.id > 2,
-            Tag.name.contains('o'),
-        )
-    )
-
-    print(q)
-    print(q.all())
+    # query_filter_by_id = query_tags.filter(
+    #     Tag.id > 2,
+    # )
+    # # print(query_filter_by_id)
+    # # print(query_filter_by_id.all())
+    # # Фильтруем теги по содержанию
+    # a_and_by_contains = query_filter_by_id.filter(
+    #     Tag.name.contains('g'),
+    # )
+    # # print(a_and_by_contains)
+    # # print(a_and_by_contains.all())
+    # # Фильтрация тегов по требованию
+    # # id > 2 & contains 'o'
+    # q = query_tags.filter(
+    #     or_(
+    #         Tag.id > 2,
+    #         Tag.name.contains('o'),
+    #     )
+    # )
+    # #
+    # print(q)
+    # print(q.all())
     # Closing session at the end of func
     session.close()
 
@@ -121,8 +127,8 @@ def show_existing_tags():
 # Adding tags for posts
 def add_tags_to_posts():
     """
-    :return:
-    """
+        :return:
+        """
     session = Session()
 
     tag = session.query(Tag).first()
@@ -132,13 +138,13 @@ def add_tags_to_posts():
     # session.commit()
 
     print(post, post.tags)
-    print(tag, tag.posts)
+    # print(tag, tag.posts)
 
 
 def show_join():
     """
-    :return:
-    """
+        :return:
+        """
     session = Session()
 
     q = session.query(
@@ -146,7 +152,7 @@ def show_join():
     ).join(
         Post,
         User.id == Post.user_id,
-    ).filter(
+        ).filter(
         # Post.title.contains('flask')
         Post.tags.any(Tag.id == 1)
     )
@@ -158,39 +164,60 @@ def show_join():
 def show_methods():
     session = Session()
 
-    q = session.query(Tag).filter(Tag.id == 1)
-    print(q)
-    print(type(q))
-    print(list(q))
-    print(q.all())
+    # q = session.query(Tag).filter(Tag.id == 1)
+    # print(q)
+    # # print(type(q))
+    # print(list(q))
+    # print(q.all())
 
     # Filter tags
-    q = session.query(Tag.name).filter(Tag.id.in_([1, 2, 4]))
-    print(q)
-    print(type(q))
-    # print(list(q))
-    res = q.all()
-    print([r for r, in res])
+    # q = session.query(Tag.name).filter(Tag.id.in_([1, 2, 4]))
+    # print(q)
+    # print(type(q))
+    # # print(list(q))
+    # res = q.all()
+    # print([r for r, in res])
 
-    q_user = session.query(User.username).filter(User.id == 1)
-    user = q_user.one()
-    print(user)
+    # q_user = session.query(User.username).filter(User.id == 1)
+    # user = q_user.one()
+    # print(user)
+    #
+    # res_username = q_user.scalar()
+    # print('username:', res_username)
 
-    res_username = q_user.scalar()
-    print('username:', res_username)
 
+# Делаем проверку наличия БД в текущей папке
+path_to_db = pathlib.Path('myblog.db')
+# print(path_to_db.exists())  # True
+# print(path_to_db.is_file())  # True
 
 def main():
     """
-    :return:
-    """
-    Base.metadata.create_all()
-    create_users_posts()
-    # show_existing_tags()
-    # add_tags_to_posts()
-    # show_join()
-    # show_methods()
+        :return:
+        """
+    if not path_to_db:
+        Base.metadata.create_all()
+        create_users_posts()
+    show_existing_tags()
+    add_tags_to_posts()
+    show_join()
+    show_methods()
 
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
