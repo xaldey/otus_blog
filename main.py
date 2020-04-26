@@ -102,6 +102,9 @@ def create_standard_tags():
     #     print(tag)
     #     print(type(tag))
     standard_tags = ('комедия', 'боевик', 'ужасы', 'мультфильм', 'документалка')
+    for tag_candidate in standard_tags:
+        existed_tags.add(tag_candidate)
+    print(existed_tags)
     # all_tags = existed_tags + standard_tags
     for tag_candidate in standard_tags:
         if tag_candidate in existed_tags:
