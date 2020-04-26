@@ -68,39 +68,44 @@ def create_users_posts():
     # flush session to get id of newly created user
     session.flush(session)
     # make some posts for user
-    post1 = Post(user_id=user.id, title='Flask lesson', text='faluhferui fhrifh r')
-    post2 = Post(user_id=user.id, title='Django lesson', text='vneotnqporgnsdgj')
+    post1 = Post(user_id=user.id, title='Обзор фильма "Во все тяжкие"', text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"')
+    post2 = Post(user_id=user.id, title='Обзор фильма "Гладиатор"', text='Здесь находится большой текст-описание обзора фильма "Гладиатор"')
+    post3 = Post(user_id=user.id, title='Обзор фильма "Терминатор"', text='Здесь находится большой текст-описание обзора фильма "Терминатор"')
     session.add(post1)
     session.add(post2)
-
+    session.add(post3)
+    # Вносим данные в БД и закрываем сессию
     session.commit()
     session.close()
 
 
+# Показываем существующие теги
 def show_existing_tags():
     session = Session()
 
-    q_tags = session.query(Tag)
-    tag = q_tags.first()
+    query_tags = session.query(Tag)
+    # Show first tag
+    tag = query_tags.first()
     print(tag)
     print(tag.posts)
-    # tags = q_tags.all()
-    tags = list(q_tags)
+    # tags = query_tags.all()
+    tags = list(query_tags)
     print(tags)
 
-    q_f_by_id = q_tags.filter(
+    query_filter_by_id = query_tags.filter(
         Tag.id > 2,
     )
-    print(q_f_by_id)
-    print(q_f_by_id.all())
-
-    a_and_by_contains = q_f_by_id.filter(
+    print(query_filter_by_id)
+    print(query_filter_by_id.all())
+    # Фильтруем теги по содержанию
+    a_and_by_contains = query_filter_by_id.filter(
         Tag.name.contains('g'),
     )
     print(a_and_by_contains)
     print(a_and_by_contains.all())
-
-    q = q_tags.filter(
+    # Фильтрация тегов по требованию
+    # id > 2 & contains 'o'
+    q = query_tags.filter(
         or_(
             Tag.id > 2,
             Tag.name.contains('o'),
@@ -109,10 +114,11 @@ def show_existing_tags():
 
     print(q)
     print(q.all())
-
+    # Closing session at the end of func
     session.close()
 
 
+# Adding tags for posts
 def add_tags_to_posts():
     """
     :return:
@@ -148,6 +154,7 @@ def show_join():
     print(q.all())
 
 
+# make func for showing methods
 def show_methods():
     session = Session()
 
@@ -157,6 +164,7 @@ def show_methods():
     print(list(q))
     print(q.all())
 
+    # Filter tags
     q = session.query(Tag.name).filter(Tag.id.in_([1, 2, 4]))
     print(q)
     print(type(q))
@@ -178,10 +186,11 @@ def main():
     """
     Base.metadata.create_all()
     create_users_posts()
-    show_existing_tags()
-    add_tags_to_posts()
-    show_join()
-    show_methods()
+    # show_existing_tags()
+    # add_tags_to_posts()
+    # show_join()
+    # show_methods()
+
 
 if __name__ == '__main__':
     main()
