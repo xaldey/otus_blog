@@ -1,6 +1,5 @@
 from main import User, Post, Tag
 import sqlite3
-import pytest
 import os.path
 import datetime
 import pathlib
@@ -8,6 +7,7 @@ import pytest
 
 expected_db_path = 'myblog.db'
 path = ''
+
 
 def is_file_exists():
     path = pathlib.Path(input('Введите имя файла БД: '))
@@ -31,15 +31,10 @@ class TestBlog:
     @pytest.mark.parametrize(
         'args, expected_result',
         [
-            pytest.param(
-                ('test_blog.py'), ('wrong_file.py')
-            ),
-            pytest.param(
-                ('myblog.db'), ('myblog.db')
-            )
+            pytest.param('test_blog.py', 'wrong_file.py'),
+            pytest.param('myblog.db', 'myblog.db')
         ]
     )
-
     def test_is_file_exists(self, args, expected_result):
         # path_db = 'test_blog.py'
         if str(args) == str(pathlib.Path(args)):
@@ -59,7 +54,7 @@ class TestBlog:
         if path == expected_db_path:
             conn = sqlite3.connect(path)
             cursor = conn.cursor()
-            cursor.execute("SELECT title FROM Post WHERE post.id = 1")
+            cursor.execute("SELECT title FROM posts WHERE posts.id = 1")
             results = cursor.fetchall()
             print(results)
         else:
