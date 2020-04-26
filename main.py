@@ -77,9 +77,13 @@ def create_users_posts():
     post1 = Post(user_id=user.id, title='Обзор фильма "Во все тяжкие"', text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"')
     post2 = Post(user_id=user.id, title='Обзор фильма "Гладиатор"', text='Здесь находится большой текст-описание обзора фильма "Гладиатор"')
     post3 = Post(user_id=user.id, title='Обзор фильма "Терминатор"', text='Здесь находится большой текст-описание обзора фильма "Терминатор"')
+    post4 = Post(user_id=user.id, title='Обзор фильма "Мишки Гамми"', text='Здесь находится большой текст-описание обзора фильма "Мишки Гамми"')
+    post5 = Post(user_id=user.id, title='Обзор фильма "Кремниевая долина"', text='Здесь находится большой текст-описание обзора фильма "Кремниевая долина"')
     session.add(post1)
     session.add(post2)
     session.add(post3)
+    session.add(post4)
+    session.add(post5)
     # Вносим данные в БД и закрываем сессию
     session.commit()
     session.close()
@@ -88,16 +92,28 @@ def create_users_posts():
 # create standard tags in DB
 def create_standard_tags():
     session = Session()
-    tag1 = Tag(name='комедия')
-    tag2 = Tag(name='боевик')
-    tag3 = Tag(name='ужасы')
-    tag4 = Tag(name='мультфильм')
-    tag5 = Tag(name='документалка')
-    session.add(tag1)
-    session.add(tag2)
-    session.add(tag3)
-    session.add(tag4)
-    session.add(tag5)
+    # Сделать механизм противодействия дублирования тегов
+    # Сначала выберем все теги из БД
+    query_tags = session.query(Tag)
+    existed_tags = set(query_tags)
+    # print(existed_tags)
+    print(type(existed_tags))
+    # for tag in existed_tags:
+    #     print(tag)
+    #     print(type(tag))
+    standard_tags = ('комедия', 'боевик', 'ужасы', 'мультфильм', 'документалка')
+    # all_tags = existed_tags + standard_tags
+    for tag_candidate in standard_tags:
+        if tag_candidate in existed_tags:
+            print('Тег"',tag_candidate,'" уже содержится в БД.')
+        else:
+            tag_candidate = Tag(name=tag_candidate)
+            session.add(tag_candidate)
+    # for tag in standard_tags:
+    #     print(tag)
+    #     print(type(tag))
+    #     tag = Tag(name=tag)
+    #     session.add(tag)
     session.commit()
     session.close()
 
