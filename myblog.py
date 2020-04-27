@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker, scoped_session, joinedload
 from sqlalchemy.orm.session import sessionmaker
 
-engine = create_engine('sqlite3://myblog.db', echo=True)
+engine = create_engine('sqlite:///myblog-test.db', echo=True)
 Base = declarative_base()
 Base.metadata.create_all(engine)
 
@@ -65,13 +65,13 @@ class Tag(Base):
 # make func to create users and posts
 def create_users_posts():
     session = sessionmaker(bind=engine)
-    # make User from class User
+#     # make User from class User
     user = User(username='editor')
-    # adding user
+#     # adding user
     session.add(user)
-    # flush session to get id of newly created user
+#     # flush session to get id of newly created user
     session.flush(session)
-    # make some posts for user
+#     # make some posts for user
     post1 = Post(user_id=user.id, title='Обзор фильма "Во все тяжкие"', text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"')
     post2 = Post(user_id=user.id, title='Обзор фильма "Гладиатор"', text='Здесь находится большой текст-описание обзора фильма "Гладиатор"')
     post3 = Post(user_id=user.id, title='Обзор фильма "Терминатор"', text='Здесь находится большой текст-описание обзора фильма "Терминатор"')
@@ -82,13 +82,13 @@ def create_users_posts():
     session.add(post3)
     session.add(post4)
     session.add(post5)
-    # Вносим данные в БД и закрываем сессию
+#     # Вносим данные в БД и закрываем сессию
     session.commit()
     session.close()
-
+#
 
 def main():
-    create_users_posts
+    create_users_posts()
 
 
 if __name__ == '__main__':
