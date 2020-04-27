@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship, sessionmaker, scoped_session, joinedloa
 from sqlalchemy.ext.declarative import declarative_base
 import pathlib
 
-engine = create_engine('sqlite:///myblog.db')
+engine = create_engine('sqlite:///myblog.db', echo = True)
 Base = declarative_base(bind=engine)
 
 session_factory = sessionmaker(bind=engine)
@@ -25,7 +25,7 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(30), nullable=False)
+    username = Column(String, nullable=False)
     # make link from Post to User
     posts = relationship('Post', back_populates='user')
 
@@ -92,33 +92,33 @@ def create_users_posts():
 # create standard tags in DB
 def create_standard_tags():
     session = Session()
+    standard_tags = ('комедия', 'боевик', 'ужасы', 'мультфильм', 'документалка')
+    for tag_candidate in standard_tags:
+        tag_candidate = Tag(name=tag_candidate)
+        session.add(tag_candidate)
+        # if tag_candidate in existed_tags:
+        #     print('Тег"',tag_candidate,'" уже содержится в БД.')
+        # else:
+    session.commit()
+    session.close()
     # Сделать механизм противодействия дублирования тегов
     # Сначала выберем все теги из БД
-    query_tags = session.query(Tag)
-    existed_tags = set(query_tags)
-    # print(existed_tags)
-    print(type(existed_tags))
+    # query_tags = session.query(Tag)
+    # existed_tags = set(query_tags)
+    # # print(existed_tags)
+    # print(type(existed_tags))
     # for tag in existed_tags:
     #     print(tag)
     #     print(type(tag))
-    standard_tags = ('комедия', 'боевик', 'ужасы', 'мультфильм', 'документалка')
-    for tag_candidate in standard_tags:
-        existed_tags.add(tag_candidate)
-    print(existed_tags)
+    # for tag_candidate in standard_tags:
+    #     existed_tags.add(tag_candidate)
+    # print(existed_tags)
     # all_tags = existed_tags + standard_tags
-    for tag_candidate in standard_tags:
-        if tag_candidate in existed_tags:
-            print('Тег"',tag_candidate,'" уже содержится в БД.')
-        else:
-            tag_candidate = Tag(name=tag_candidate)
-            session.add(tag_candidate)
     # for tag in standard_tags:
     #     print(tag)
     #     print(type(tag))
     #     tag = Tag(name=tag)
     #     session.add(tag)
-    session.commit()
-    session.close()
 
 
 # Показываем существующие теги
@@ -228,18 +228,30 @@ path_to_db = pathlib.Path('myblog.db')
 # print(path_to_db.exists())  # True
 # print(path_to_db.is_file())  # True
 
+
+def create_db():
+    # if not path_to_db:
+    Base.metadata.create_all()
+    # create_users_posts()
+    # create_standard_tags()
+
+
 def main():
     """
         :return:
         """
     if not path_to_db:
-        Base.metadata.create_all()
-        create_users_posts()
+        create_db()
+    # if not path_to_db:
+    #     Base.metadata.create_all()
+    #     create_users_posts()
+    #     create_standard_tags()
+    create_users_posts()
     create_standard_tags()
-    show_existing_tags()
-    add_tags_to_posts()
-    show_join()
-    show_methods()
+    # show_existing_tags()
+    # add_tags_to_posts()
+    # show_join()
+    # show_methods()
 
 
 if __name__ == '__main__':
