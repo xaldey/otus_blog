@@ -10,11 +10,13 @@ Base = declarative_base(bind=engine)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
+
+# Переменная для хранения текущего пользователя
+active_user = ''
 # Переменная для сверки местоположения БД
 expected_db_path = 'myblog.db'
 # Создал переменную для хранения пользователя
 # По-умолчанию указан стандартный стартовый пользователь
-current_user = ''
 
 # Make outer table for link within posts and tags
 # both posts and tags are primary keys
@@ -31,7 +33,7 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(30), nullable=False)
+    username = Column(String(30), nullable=False, unique=True)
     # make link from Post to User
     posts = relationship('Post', back_populates='user')
 
@@ -75,35 +77,38 @@ def create_new_user():
     session = Session()
     # Вытащим список всех существующих пользователей из БД
     query_users = session.query(User)
+    print(query_users)
     existed_users = set(query_users)
+
+    print("Список пользователей в БД перед созданием нового пользователя:", existed_users)
     # make User from class User
-    username = input("Введите имя пользователя: ")
-    new_user = User(username=username)
-    if new_user in existed_users:
+    username: str = str(input("Введите имя пользователя: "))
+    print(username, type(username))
+    if username in existed_users:
         print("Пользователь с именем", username, "уже существует в БД. Выберите другое имя.")
+        create_new_user()
     else:
+        username = User(username=username)
         # adding user
-        session.add(new_user)
+        session.add(username)
         # flush session to get id of newly created user
         session.flush(session)
+        session.commit()
+        session.close()
     print("Пользователь",username, "добавлен в БД.")
-    current_user = new_user
-    session.commit()
-    session.close()
+    return username
 
 
 # make func to create users and posts
 def create_users_posts():
-    user = current_user
-    print('-----------')
-    print(user)
+    print('------создаем посты-----')
     # cur_user = input("Укажите имя пользователя для вносимых постов:")
     # print(current_user.u)
     session = Session()
     # Вытащим список всех существующих пользователей из БД
-    query_users = session.query(User)
+    query_users = session.query(User.username)
     existed_users = set(query_users)
-    print(existed_users)
+    print("Список пользователей в БД перед внесением постов:",existed_users)
 
     post1 = Post(user_id=user.id, title='Обзор фильма "Во все тяжкие"', text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"')
     post2 = Post(user_id=user.id, title='Обзор фильма "Гладиатор"', text='Здесь находится большой текст-описание обзора фильма "Гладиатор"')
@@ -145,7 +150,7 @@ def create_standard_tags():
     for tag in standard_tags:
         tag = Tag(name=tag)
         session.add(tag)
-        print("Тег ", tag, "внесен в список тегов")
+        print("Тег", tag.name, "внесен в список тегов")
     print("-----------------Список тегов обновлен----------------")
     session.commit()
     session.close()
@@ -295,20 +300,30 @@ def show_methods():
 
 #
 def login_user():
+    cur_user = input("Укажите имя пользователя для вносимых постов:")
     session = Session()
     # Вытащим список всех существующих пользователей из БД
     query_users = session.query(User)
+    print(query_users)
     existed_users = set(query_users)
-    print(existed_users)
-    cur_user = input("Укажите имя пользователя для вносимых постов:")
+    for el in existed_users:
+        print(el)
+    print("Список пользователей в БД перед логином:",existed_users)
+    print(cur_user, type(cur_user))
     if cur_user not in existed_users:
         print("Пользователя с именем", cur_user, "в БД не существует.")
         print("Необходимо создать пользователя.")
         create_new_user()
     else:
         create_users_posts()
+        return cur_user
     session.commit()
     session.close()
+
+
+# Делаем активного пользователя
+def active_user():
+    pass
 
 
 # Создадим стартовый набор таблиц в БД
@@ -332,34 +347,24 @@ def base_create():
 
 
 # Делаем проверку наличия БД в текущей папке
-# print(path_to_db.exists())  # True
 def is_base_exists():
-    # path_to_db = pathlib.Path('myblog.db')
-    # print(type(path_to_db))
-    # print(path_to_db)
     if os.path.isfile(expected_db_path) and os.path.exists(expected_db_path):
         print("База данных в наличии.")
     else:
         base_create()
         print("Базы данных не было. Теперь она создана.")
 
-# print(path_to_db.is_file())  # True
-
 
 def main():
     """
         :return:
         """
-    print(current_user)
     print("Проверим наличие БД")
     is_base_exists()
-    print(current_user)
     print("Залогинимся?")
     login_user()
-    print(current_user)
     print("Запишем подготовленные посты в БД?")
     create_users_posts()
-    print(current_user)
     # show_existing_tags()
     # add_tags_to_posts()
     # show_join()
