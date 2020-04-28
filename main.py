@@ -134,28 +134,28 @@ def show_existing_tags():
     tags = list(query_tags)
     print(tags)
 
-    # query_filter_by_id = query_tags.filter(
-    #     Tag.id > 2,
-    # )
-    # # print(query_filter_by_id)
-    # # print(query_filter_by_id.all())
+    query_filter_by_id = query_tags.filter(
+        Tag.id > 2,
+    )
+    print(query_filter_by_id)
+    print(query_filter_by_id.all())
     # # Фильтруем теги по содержанию
-    # a_and_by_contains = query_filter_by_id.filter(
-    #     Tag.name.contains('g'),
-    # )
-    # # print(a_and_by_contains)
-    # # print(a_and_by_contains.all())
+    a_and_by_contains = query_filter_by_id.filter(
+        Tag.name.contains('g'),
+    )
+    print(a_and_by_contains)
+    print(a_and_by_contains.all())
     # # Фильтрация тегов по требованию
-    # # id > 2 & contains 'o'
-    # q = query_tags.filter(
-    #     or_(
-    #         Tag.id > 2,
-    #         Tag.name.contains('o'),
-    #     )
-    # )
-    # #
-    # print(q)
-    # print(q.all())
+    # id > 2 & contains 'o'
+    q = query_tags.filter(
+        or_(
+            Tag.id > 2,
+            Tag.name.contains('o'),
+        )
+    )
+    #
+    print(q)
+    print(q.all())
     # Closing session at the end of func
     session.close()
 
@@ -200,26 +200,26 @@ def show_join():
 def show_methods():
     session = Session()
 
-    # q = session.query(Tag).filter(Tag.id == 1)
-    # print(q)
-    # # print(type(q))
-    # print(list(q))
-    # print(q.all())
+    q = session.query(Tag).filter(Tag.id == 1)
+    print(q)
+    # print(type(q))
+    print(list(q))
+    print(q.all())
 
     # Filter tags
-    # q = session.query(Tag.name).filter(Tag.id.in_([1, 2, 4]))
-    # print(q)
-    # print(type(q))
-    # # print(list(q))
-    # res = q.all()
-    # print([r for r, in res])
+    q = session.query(Tag.name).filter(Tag.id.in_([1, 2, 4]))
+    print(q)
+    print(type(q))
+    # print(list(q))
+    res = q.all()
+    print([r for r, in res])
 
-    # q_user = session.query(User.username).filter(User.id == 1)
-    # user = q_user.one()
-    # print(user)
-    #
-    # res_username = q_user.scalar()
-    # print('username:', res_username)
+    q_user = session.query(User.username).filter(User.id == 1)
+    user = q_user.one()
+    print(user)
+
+    res_username = q_user.scalar()
+    print('username:', res_username)
     session.close()
 
 
@@ -228,13 +228,14 @@ path_to_db = pathlib.Path('myblog.db')
 # print(path_to_db.exists())  # True
 # print(path_to_db.is_file())  # True
 
+
 def main():
     """
         :return:
         """
     if not path_to_db:
         Base.metadata.create_all()
-        create_users_posts()
+    create_users_posts()
     create_standard_tags()
     show_existing_tags()
     add_tags_to_posts()
