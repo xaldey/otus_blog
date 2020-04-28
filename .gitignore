@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 .idea/
 
+# DB exclude
+myblog.db
+
+
 # C extensions
 *.so
 
