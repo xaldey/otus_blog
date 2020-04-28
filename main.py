@@ -12,7 +12,8 @@ Session = scoped_session(session_factory)
 
 
 # Переменная для хранения текущего пользователя
-active_user = ''
+active_user = 'start_user'
+
 # Переменная для сверки местоположения БД
 expected_db_path = 'myblog.db'
 # Создал переменную для хранения пользователя
@@ -74,29 +75,25 @@ class Tag(Base):
 
 # Делаем функцию проверки наличия и добавления пользователя
 def create_new_user():
-    session = Session()
     # Вытащим список всех существующих пользователей из БД
+    session = Session()
     query_users = session.query(User)
-    print(query_users)
     existed_users = set(query_users)
-
     print("Список пользователей в БД перед созданием нового пользователя:", existed_users)
-    # make User from class User
-    username: str = str(input("Введите имя пользователя: "))
-    print(username, type(username))
-    if username in existed_users:
-        print("Пользователь с именем", username, "уже существует в БД. Выберите другое имя.")
-        create_new_user()
+    new_username: str = str(input("Введите имя пользователя: "))
+    if new_username in existed_users:
+        print("Пользователь с именем", new_username, "уже существует в БД. Выберите другое имя.")
+        # create_new_user()
+        quit()
     else:
-        username = User(username=username)
+        username = User(username=new_username)
         # adding user
         session.add(username)
         # flush session to get id of newly created user
         session.flush(session)
-        session.commit()
-        session.close()
-    print("Пользователь",username, "добавлен в БД.")
-    return username
+    print("Пользователь",new_username, "добавлен в БД.")
+    session.commit()
+    session.close()
 
 
 # make func to create users and posts
@@ -104,6 +101,7 @@ def create_users_posts():
     print('------создаем посты-----')
     # cur_user = input("Укажите имя пользователя для вносимых постов:")
     # print(current_user.u)
+
     session = Session()
     # Вытащим список всех существующих пользователей из БД
     query_users = session.query(User.username)
@@ -298,25 +296,23 @@ def show_methods():
     session.close()
 
 
-#
+#Функция для проверки авторизации пользователя
 def login_user():
     cur_user = input("Укажите имя пользователя для вносимых постов:")
     session = Session()
     # Вытащим список всех существующих пользователей из БД
     query_users = session.query(User)
-    print(query_users)
+    # print(query_users)
     existed_users = set(query_users)
     for el in existed_users:
+        print("Список пользователей в БД перед логином:")
         print(el)
-    print("Список пользователей в БД перед логином:",existed_users)
-    print(cur_user, type(cur_user))
-    if cur_user not in existed_users:
-        print("Пользователя с именем", cur_user, "в БД не существует.")
-        print("Необходимо создать пользователя.")
-        create_new_user()
-    else:
-        create_users_posts()
-        return cur_user
+        if cur_user not in existed_users:
+            print("Пользователя с именем", cur_user, "в БД не существует.")
+            print("Необходимо создать пользователя.")
+            create_new_user()
+        else:
+            create_users_posts()
     session.commit()
     session.close()
 
@@ -334,9 +330,7 @@ def create_tables():
     session.flush(session)
     session.commit()
     session.close()
-    current_user = standard_user
-    print("Стандартный пользователь внесен в БД")
-    # print(current_user.username)
+    print("Стандартный пользователь 'start_user' внесен в БД")
 
 
 # Создаем базу и наполняем стандартным набором тегов
