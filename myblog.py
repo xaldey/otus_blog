@@ -10,14 +10,9 @@ Base = declarative_base(bind=engine)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
-
-# Переменная для хранения текущего пользователя
-active_user = 'start_user'
-cur_user = ''
 # Переменная для сверки местоположения БД
 expected_db_path = 'myblog.db'
-# Создал переменную для хранения пользователя
-# По-умолчанию указан стандартный стартовый пользователь
+cur_user = ''
 
 # Make outer table for link within posts and tags
 # both posts and tags are primary keys
@@ -92,6 +87,8 @@ def create_new_user():
         # flush session to get id of newly created user
         session.flush(session)
     print("Пользователь", new_username, "добавлен в БД.")
+    cur_user = new_username
+    return cur_user
     session.commit()
     session.close()
 
@@ -99,14 +96,11 @@ def create_new_user():
 # make func to create users and posts
 def create_users_posts(user):
     print('------создаем посты-----')
-    # cur_user = input("Укажите имя пользователя для вносимых постов:")
-    # print(current_user.u)
-
     session = Session()
     # Вытащим список всех существующих пользователей из БД
     query_users = session.query(User.username)
     existed_users = set(query_users)
-    print("Список пользователей в БД перед внесением постов:",existed_users)
+    print("Список пользователей в БД перед внесением постов:", existed_users)
 
     post1 = Post(user_id=user.id, title='Обзор фильма "Во все тяжкие"', text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"')
     post2 = Post(user_id=user.id, title='Обзор фильма "Гладиатор"', text='Здесь находится большой текст-описание обзора фильма "Гладиатор"')
@@ -120,25 +114,9 @@ def create_users_posts(user):
     session.add(post5)
     # Вносим данные в БД и закрываем сессию
     session.commit()
+    query_newposts_titles = session.query(Post).first()
     session.close()
     print("-----------------Все посты добавлены----------------")
-    # # Вытащим список всех существующих пользователей из БД
-    # query_users = session.query(User)
-    # existed_users = set(query_users)
-    # if cur_user not in existed_users:
-    #     print("Пользователя с именем",cur_user,"в БД не существует.")
-    #     print("Необходимо создать пользователя.")
-    #     create_new_user()
-    # else:
-    # print(existed_tags)
-    # make User from class User
-    # user = User(username='editor')
-    # # adding user
-    # session.add(user)
-    # # flush session to get id of newly created user
-    # session.flush(session)
-    # make some posts for user
-    #     user = cur_user
 
 
 # create standard tags in DB
@@ -152,30 +130,28 @@ def create_standard_tags():
     print("-----------------Список тегов обновлен----------------")
     session.commit()
     session.close()
-    # Сделать механизм противодействия дублирования тегов
-    # Сначала выберем все теги из БД
-    # query_tags = session.query(Tag)
-    # existed_tags = set(query_tags)
-    # # print(existed_tags)
-    # print(type(existed_tags))
-    # print(existed_tags)
-    # print("-----------------Все существующие теги----------------")
-    # for tag in existed_tags:
-    #     print(tag)
-    #     print(type(tag))
-    # for tag_candidate in standard_tags:
-    #     existed_tags.add(tag_candidate)
-    # all_tags = existed_tags + standard_tags
-    # for tag_candidate in standard_tags:
-    #     if tag_candidate in existed_tags:
-    #         print('Тег"',tag_candidate,'" уже содержится в БД.')
-    #     else:
-    #         pass
-    # # for tag in standard_tags:
-    # #     print(tag)
-    #     print(type(tag))
-    #     tag = Tag(name=tag)
-    #     session.add(tag)
+
+
+# Функция для проверки авторизации пользователя
+def login_user():
+    cur_user = input("Укажите имя пользователя для вносимых постов:")
+    session = Session()
+    # Вытащим список всех существующих пользователей из БД
+    query_users = session.query(User)
+    print(type(query_users))
+    existed_users = set(query_users)
+    for el in existed_users:
+        print("Список пользователей в БД перед логином:")
+        print(el)
+        if cur_user not in existed_users:
+            print("Пользователя с именем", cur_user, "в БД не существует.")
+            print("Необходимо создать пользователя.")
+            create_new_user()
+        else:
+            create_users_posts()
+    return cur_user
+    session.commit()
+    session.close()
 
 
 # Показываем существующие теги
@@ -296,34 +272,6 @@ def show_methods():
     session.close()
 
 
-# Функция для проверки авторизации пользователя
-def login_user():
-    cur_user = input("Укажите имя пользователя для вносимых постов:")
-    session = Session()
-    # Вытащим список всех существующих пользователей из БД
-    query_users = session.query(User)
-    # print(query_users)
-    existed_users = set(query_users)
-    for el in existed_users:
-        print("Список пользователей в БД перед логином:")
-        print(el)
-        if cur_user not in existed_users:
-            print("Пользователя с именем", cur_user, "в БД не существует.")
-            print("Необходимо создать пользователя.")
-            create_new_user()
-        else:
-            create_users_posts()
-    user = session.query(User).filter(name=cur_user).first()
-    print(user)
-    session.commit()
-    session.close()
-
-
-# Делаем активного пользователя
-def active_user():
-    pass
-
-
 # Создадим стартовый набор таблиц в БД
 def create_tables():
     session = Session()
@@ -338,8 +286,8 @@ def create_tables():
 # Создаем базу и наполняем стандартным набором тегов
 def base_create():
     Base.metadata.create_all()
-    create_standard_tags()
     create_tables()
+    create_standard_tags()
 
 
 # Делаем проверку наличия БД в текущей папке
@@ -360,11 +308,10 @@ def main():
     print("Залогинимся?")
     login_user()
     print("Запишем подготовленные посты в БД?")
-    create_users_posts()
-    # show_existing_tags()
-    # add_tags_to_posts()
-    # show_join()
-    # show_methods()
+    session = Session()
+
+    user = session.query(User).first()
+    create_users_posts(user)
 
 
 if __name__ == '__main__':
