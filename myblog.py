@@ -12,7 +12,7 @@ Session = scoped_session(session_factory)
 
 # Переменная для сверки местоположения БД
 expected_db_path = 'myblog.db'
-cur_user = ''
+cur_user: str = ''
 
 # Make outer table for link within posts and tags
 # both posts and tags are primary keys
@@ -75,11 +75,10 @@ def create_new_user():
     query_users = session.query(User)
     existed_users = set(query_users)
     print("Список пользователей в БД перед созданием нового пользователя:", existed_users)
-    new_username: str = str(input("Введите имя пользователя: "))
+    new_username = input("Введите имя пользователя: ")
     if new_username in existed_users:
         print("Пользователь с именем", new_username, "уже существует в БД. Выберите другое имя.")
-        # create_new_user()
-        quit()
+        login_user()
     else:
         username = User(username=new_username)
         # adding user
@@ -89,18 +88,19 @@ def create_new_user():
     print("Пользователь", new_username, "добавлен в БД.")
     cur_user = new_username
     return cur_user
+    print("Создан пользователь ", cur_user)
     session.commit()
     session.close()
 
 
 # make func to create users and posts
-def create_users_posts(user):
-    print('------создаем посты-----')
+def create_users_posts(cur_user):
+    print("Залогиненный пользователь: ", cur_user)
     session = Session()
-    # Вытащим список всех существующих пользователей из БД
-    query_users = session.query(User.username)
-    existed_users = set(query_users)
-    print("Список пользователей в БД перед внесением постов:", existed_users)
+    # query_user = session.query(User).filter_by(username=cur_user)
+    user = session.query(User).filter(name=cur_user).first()
+    print("Создаем посты от имени пользователя: ", user)
+    print('------создаем посты-----')
 
     post1 = Post(user_id=user.id, title='Обзор фильма "Во все тяжкие"', text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"')
     post2 = Post(user_id=user.id, title='Обзор фильма "Гладиатор"', text='Здесь находится большой текст-описание обзора фильма "Гладиатор"')
@@ -114,7 +114,7 @@ def create_users_posts(user):
     session.add(post5)
     # Вносим данные в БД и закрываем сессию
     session.commit()
-    query_newposts_titles = session.query(Post).first()
+    # query_newposts_titles = session.query(Post).first()
     session.close()
     print("-----------------Все посты добавлены----------------")
 
@@ -134,24 +134,26 @@ def create_standard_tags():
 
 # Функция для проверки авторизации пользователя
 def login_user():
-    cur_user = input("Укажите имя пользователя для вносимых постов:")
     session = Session()
-    # Вытащим список всех существующих пользователей из БД
-    query_users = session.query(User)
-    print(type(query_users))
+    print("Вытащим список всех существующих пользователей из БД перед логином.")
+    query_users = session.query(User.username)
     existed_users = set(query_users)
-    for el in existed_users:
-        print("Список пользователей в БД перед логином:")
-        print(el)
-        if cur_user not in existed_users:
-            print("Пользователя с именем", cur_user, "в БД не существует.")
-            print("Необходимо создать пользователя.")
-            create_new_user()
-        else:
-            create_users_posts()
-    return cur_user
+    print("Список пользователей в БД перед логином:", existed_users)
+    user_to_login = input("Укажите имя пользователя для вносимых постов:")
+    cur_user = user_to_login
+    if user_to_login in existed_users:
+        print("Пользователь", user_to_login, "уже присутствует в БД.")
+        print("Создаем посты пользователя", user_to_login)
+        print("(Из функции логина) Текущий пользователь: ", cur_user)
+        create_users_posts(user_to_login)
+    else:
+        print("Пользователя с именем", user_to_login, "в БД не существует.")
+        print("Необходимо создать пользователя.")
+        create_new_user()
     session.commit()
     session.close()
+    cur_user = user_to_login
+    return cur_user
 
 
 # Показываем существующие теги
@@ -274,6 +276,7 @@ def show_methods():
 
 # Создадим стартовый набор таблиц в БД
 def create_tables():
+    print("-------------\nСоздание стартового набора таблиц БД")
     session = Session()
     standard_user: User = User(username='start_user')
     session.add(standard_user)
@@ -307,11 +310,7 @@ def main():
     is_base_exists()
     print("Залогинимся?")
     login_user()
-    print("Запишем подготовленные посты в БД?")
-    session = Session()
-
-    user = session.query(User).first()
-    create_users_posts(user)
+    create_users_posts(cur_user)
 
 
 if __name__ == '__main__':
