@@ -106,7 +106,6 @@ def login_user():
     session = Session()
     print("Вытащим список всех существующих пользователей из БД перед логином.")
     query_users = session.query(User)
-    print(query_users)
     existed_users = set(query_users)
     print("Список пользователей в БД перед логином:", existed_users)
     user_to_login = input("Укажите имя пользователя для вносимых постов:")
@@ -167,6 +166,7 @@ def create_users_posts(new_username):
     session.add(post5)
     # Вносим данные в БД и закрываем сессию
     session.commit()
+
     user = session.query(User).filter_by(username=new_username).first()
     user_posts = session.query(Post).filter_by(user_id=user.id)
     user_posts = set(user_posts)
@@ -174,6 +174,26 @@ def create_users_posts(new_username):
     for post in user_posts:
         print("Пост:", post,"- размещен пользователем: ",user)
     session.close()
+
+
+def show_posts():
+    session = Session()
+    query_users = session.query(User)
+    existed_users = set(query_users)
+    print("Список пользователей в БД перед запросом постов:", existed_users)
+    new_username = input("Укажите имя пользователя: ")
+    user = session.query(User).filter_by(username=new_username).first()
+    user_posts = session.query(Post).filter_by(user_id=user.id)
+    user_posts = set(user_posts)
+    if new_username not in existed_users:
+        print("Выбран несуществующий пользователь.")
+        print(' -*-' * 100)
+        show_posts()
+    else:
+        for post in user_posts:
+            print("Пост:", post, "- размещен пользователем: ", user)
+    session.close()
+    what_next()
 
 
 # Показываем существующие теги
@@ -219,13 +239,15 @@ def add_tags_to_posts():
     Adding tags for posts
         :return:
         """
-    session = Session()
-    tag = session.query(Tag).first()
-    post: Post = session.query(Post).first()
-    q_user = session.query(User.username).filter(User.id == 1)
-    res_username = q_user.scalar()
-    print('username:', res_username)
-    print("----Все посты и их теги----", post, post.tags)
+    pass
+    # session = Session()
+    # tag = session.query(Tag).first()
+    # post: Post = session.query(Post).first()
+    # q_user = session.query(User.username).filter(User.id == 1)
+    # res_username = q_user.scalar()
+    # print('username:', res_username)
+    # print("----Все посты и их теги----\n", post, post.tags)
+    # session.close()
 
 
 def show_join():
@@ -268,12 +290,25 @@ def show_methods():
     # print([r for r, in res])
     # print("-----666------Разобраться неясно, что отображает----------")
 
-    q_user = session.query(User.username).filter(User.id == 1)
-    q_user = session.query(User.username).filter(User.id == 1)
-    res_username = q_user.scalar()
-    print('username:', res_username)
-    print("-----888----------------")
+    # q_user = session.query(User.username).filter(User.id == 1)
+    # q_user = session.query(User.username).filter(User.id == 1)
+    # res_username = q_user.scalar()
+    # print('username:', res_username)
+    # print("-----888----------------")
     session.close()
+
+
+def what_next():
+    print("Что делаем дальше? Посмотрим посты других пользователей (жми 0) или выход (любая клавиша)")
+    choice = int(input("Выбор: "))
+    if choice is not isinstance(int):
+        print("Bye-bye!")
+        quit()
+    if choice != 0:
+        print("Bye-bye!")
+        quit()
+    else:
+        show_posts()
 
 
 def main():
@@ -286,7 +321,8 @@ def main():
     show_existing_tags()
     add_tags_to_posts()
     show_join()
-    show_methods()
+    show_posts()
+    # show_methods()
 
 
 if __name__ == '__main__':
