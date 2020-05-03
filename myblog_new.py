@@ -145,14 +145,16 @@ def create_new_user(user_to_login):
     create_users_posts(new_username)
 
 
-# make func to create users and posts
 def create_users_posts(new_username):
+    """
+    make func to create users and posts
+    :param new_username:
+    :return:
+    """
     session = Session()
-    # query_user = session.query(User).filter_by(username=cur_user)
     user = session.query(User).filter_by(username=new_username).first()
     print("Создаем посты от имени пользователя: ", user)
     print('------создаем посты-----')
-
     post1 = Post(user_id=user.id, title='Обзор фильма "Во все тяжкие"', text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"')
     post2 = Post(user_id=user.id, title='Обзор фильма "Гладиатор"', text='Здесь находится большой текст-описание обзора фильма "Гладиатор"')
     post3 = Post(user_id=user.id, title='Обзор фильма "Терминатор"', text='Здесь находится большой текст-описание обзора фильма "Терминатор"')
@@ -165,9 +167,13 @@ def create_users_posts(new_username):
     session.add(post5)
     # Вносим данные в БД и закрываем сессию
     session.commit()
-    # query_newposts_titles = session.query(Post).first()
-    session.close()
+    user = session.query(User).filter_by(username=new_username).first()
+    user_posts = session.query(Post).filter_by(user_id=user.id)
+    user_posts = set(user_posts)
     print("-----------------Все посты добавлены----------------")
+    for post in user_posts:
+        print("Пост:", post,"- размещен пользователем: ",user)
+    session.close()
 
 
 # Показываем существующие теги
@@ -178,51 +184,48 @@ def show_existing_tags():
     tags = list(query_tags)
     print("-----------------Все существующие теги----------------")
     print(tags)
-
-    query_filter_by_id = query_tags.filter(
-        Tag.id > 2,
-    )
-    print("----Тег с id > 2----", query_filter_by_id)
-    # Фильтруем теги по содержанию
-    a_and_by_contains = query_filter_by_id.filter(
-        Tag.name.contains('ком'),
-    )
-    print(a_and_by_contains)
-    print("----Все теги содержащие ком----")
-    print(a_and_by_contains.all())
-    print("----Все теги содержащие ком----")
-    # # Фильтрация тегов по требованию
-    # id > 2 & contains 'o'
-    q = query_tags.filter(
-        or_(
-            Tag.id > 2,
-            Tag.name.contains('уж'),
-        )
-    )
     #
-    print(q)
-    print("----Все теги содержащие уж----")
-    print(q.all())
-    print("----Все теги содержащие уж----")
+    # query_filter_by_id = query_tags.filter(
+    #     Tag.id > 2,
+    # )
+    # print("----Тег с id > 2----", query_filter_by_id)
+    # # Фильтруем теги по содержанию
+    # a_and_by_contains = query_filter_by_id.filter(
+    #     Tag.name.contains('ком'),
+    # )
+    # print(a_and_by_contains)
+    # print("----Все теги содержащие ком----")
+    # print(a_and_by_contains.all())
+    # print("----Все теги содержащие ком----")
+    # # # Фильтрация тегов по требованию
+    # # id > 2 & contains 'o'
+    # q = query_tags.filter(
+    #     or_(
+    #         Tag.id > 2,
+    #         Tag.name.contains('уж'),
+    #     )
+    # )
+    # #
+    # print(q)
+    # print("----Все теги содержащие уж----")
+    # print(q.all())
+    # print("----Все теги содержащие уж----")
     # Closing session at the end of func
     session.close()
 
 
-# Adding tags for posts
 def add_tags_to_posts():
     """
+    Adding tags for posts
         :return:
         """
     session = Session()
     tag = session.query(Tag).first()
     post: Post = session.query(Post).first()
-    # post.tags.append(tag)
-    #
-    # session.commit()
-
-    print(post, post.tags)
-    print("----Все посты и их теги----")
-    # print(tag, tag.posts)
+    q_user = session.query(User.username).filter(User.id == 1)
+    res_username = q_user.scalar()
+    print('username:', res_username)
+    print("----Все посты и их теги----", post, post.tags)
 
 
 def show_join():
@@ -237,47 +240,39 @@ def show_join():
         Post,
         User.id == Post.user_id,
         ).filter(
-        # Post.title.contains('flask')
-        Post.tags.any(Tag.id == 1)
+        Post.title.contains('Гладиа')
     )
-    print("-----000-----Разобраться неясно, что отображает---------")
-    print(q)
-    print(q.all())
-    print("-----3213213541----Разобраться неясно, что отображает----------")
 
 
 # make func for showing methods
 def show_methods():
     session = Session()
 
-    q = session.query(Tag).filter(Tag.id == 1)
-    print(q)
-    print("-----111------Разобраться неясно, что отображает----------")
+    # q = session.query(Tag).filter(Tag.id == 1)
+    # print(q)
+    # print("-----111------Разобраться неясно, что отображает----------")
     # print(type(q))
-    print(list(q))
-    print("-----222------Разобраться неясно, что отображает----------")
-    print(q.all())
-    print("-----333------Разобраться неясно, что отображает----------")
+    # print(list(q))
+    # print("-----222------Разобраться неясно, что отображает----------")
+    # print(q.all())
+    # print("-----333------Разобраться неясно, что отображает----------")
 
     # Filter tags
-    q = session.query(Tag.name).filter(Tag.id.in_([1, 2, 4]))
-    print(q)
-    print("-----444------Разобраться неясно, что отображает----------")
-    print(type(q))
-    print("-----555------Разобраться неясно, что отображает----------")
-    # print(list(q))
-    res = q.all()
-    print([r for r, in res])
-    print("-----666------Разобраться неясно, что отображает----------")
+    # q = session.query(Tag.name).filter(Tag.id.in_([1, 2, 4]))
+    # print(q)
+    # print("-----444------Разобраться неясно, что отображает----------")
+    # print(type(q))
+    # print("-----555------Разобраться неясно, что отображает----------")
+    # # print(list(q))
+    # res = q.all()
+    # print([r for r, in res])
+    # print("-----666------Разобраться неясно, что отображает----------")
 
     q_user = session.query(User.username).filter(User.id == 1)
-    user = q_user.one()
-    print(user)
-    print("-----777------Разобраться неясно, что отображает----------")
-
+    q_user = session.query(User.username).filter(User.id == 1)
     res_username = q_user.scalar()
     print('username:', res_username)
-    print("-----888------Разобраться неясно, что отображает----------")
+    print("-----888----------------")
     session.close()
 
 
