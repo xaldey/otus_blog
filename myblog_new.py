@@ -67,8 +67,63 @@ class Tag(Base):
         return f'<Tag #{self.id} {self.name}>'
 
 
+# Делаем проверку наличия БД в текущей папке
+def is_base_exists():
+    print("Проверим наличие БД")
+    if os.path.isfile(expected_db_path) and os.path.exists(expected_db_path):
+        print("База данных в наличии.")
+    else:
+        base_create()
+        print("Базы данных не было. Теперь она создана.")
+
+
+# Создаем базу и наполняем стандартным набором тегов
+def base_create():
+    Base.metadata.create_all()
+    create_tables_and_tags()
+
+
+# Создадим стартовый набор таблиц в БД
+def create_tables_and_tags():
+    print("-------------\nСоздание стартового набора таблиц БД")
+    session = Session()
+    standard_user: User = User(username='start_user')
+    session.add(standard_user)
+    session.flush(session)
+    standard_tags = ('комедия', 'боевик', 'ужасы', 'мультфильм', 'документалка')
+    for tag in standard_tags:
+        tag = Tag(name=tag)
+        session.add(tag)
+        print("Тег", tag.name, "внесен в список тегов")
+    print("-----------------Список тегов обновлен----------------")
+    session.commit()
+    session.close()
+    print("Стандартный пользователь 'start_user' внесен в БД")
+
+
+# Функция для проверки авторизации пользователя
+def login_user():
+    session = Session()
+    print("Вытащим список всех существующих пользователей из БД перед логином.")
+    query_users = session.query(User)
+    print(query_users)
+    existed_users = set(query_users)
+    print("Список пользователей в БД перед логином:", existed_users)
+    user_to_login = input("Укажите имя пользователя для вносимых постов:")
+    if user_to_login in existed_users:
+        print("Пользователь", user_to_login, "уже присутствует в БД.")
+        print("(Из функции логина) Создаем посты пользователя", user_to_login)
+        create_users_posts(user_to_login)
+    else:
+        print("Пользователя с именем", user_to_login, "в БД не существует.")
+        print("Необходимо создать пользователя.")
+        create_new_user(user_to_login)
+    session.commit()
+    session.close()
+
+
 # Делаем функцию проверки наличия и добавления пользователя
-def create_new_user():
+def create_new_user(user_to_login):
     # Вытащим список всех существующих пользователей из БД
     session = Session()
     query_users = session.query(User)
@@ -77,7 +132,7 @@ def create_new_user():
     new_username = input("Введите имя пользователя: ")
     if new_username in existed_users:
         print("Пользователь с именем", new_username, "уже существует в БД. Выберите другое имя.")
-        login_user()
+        login_user(new_username)
     else:
         username = User(username=new_username)
         # adding user
@@ -85,19 +140,16 @@ def create_new_user():
         # flush session to get id of newly created user
         session.flush(session)
     print("Пользователь", new_username, "добавлен в БД.")
-    cur_user = new_username
-    return cur_user
-    print("Создан пользователь ", cur_user)
     session.commit()
     session.close()
+    create_users_posts(new_username)
 
 
 # make func to create users and posts
-def create_users_posts(cur_user):
-    print("Залогиненный пользователь: ", cur_user)
+def create_users_posts(new_username):
     session = Session()
     # query_user = session.query(User).filter_by(username=cur_user)
-    user = session.query(User).filter_by(username=cur_user)
+    user = session.query(User).filter_by(username=new_username).first()
     print("Создаем посты от имени пользователя: ", user)
     print('------создаем посты-----')
 
@@ -118,64 +170,20 @@ def create_users_posts(cur_user):
     print("-----------------Все посты добавлены----------------")
 
 
-# create standard tags in DB
-def create_standard_tags():
-    session = Session()
-    standard_tags = ('комедия', 'боевик', 'ужасы', 'мультфильм', 'документалка')
-    for tag in standard_tags:
-        tag = Tag(name=tag)
-        session.add(tag)
-        print("Тег", tag.name, "внесен в список тегов")
-    print("-----------------Список тегов обновлен----------------")
-    session.commit()
-    session.close()
-
-
-# Функция для проверки авторизации пользователя
-def login_user():
-    session = Session()
-    print("Вытащим список всех существующих пользователей из БД перед логином.")
-    query_users = session.query(User.username)
-    existed_users = set(query_users)
-    print("Список пользователей в БД перед логином:", existed_users)
-    user_to_login = input("Укажите имя пользователя для вносимых постов:")
-    cur_user = user_to_login
-    if user_to_login in existed_users:
-        print("Пользователь", user_to_login, "уже присутствует в БД.")
-        print("Создаем посты пользователя", user_to_login)
-        print("(Из функции логина) Текущий пользователь: ", cur_user)
-        create_users_posts(user_to_login)
-    else:
-        print("Пользователя с именем", user_to_login, "в БД не существует.")
-        print("Необходимо создать пользователя.")
-        create_new_user()
-    session.commit()
-    session.close()
-    cur_user = user_to_login
-    return cur_user
-
-
 # Показываем существующие теги
 def show_existing_tags():
     session = Session()
     query_tags = session.query(Tag)
     tag = query_tags.first()
-    # Show first tag
-    # print(tag)
-    # print(tag.posts)
-    # tags = query_tags.all()
     tags = list(query_tags)
-    print(tags)
     print("-----------------Все существующие теги----------------")
+    print(tags)
 
     query_filter_by_id = query_tags.filter(
         Tag.id > 2,
     )
-    print(query_filter_by_id)
-    print("----Тег с id > 2----")
-    print(query_filter_by_id.all())
-    print("----All tags----")
-    # # Фильтруем теги по содержанию
+    print("----Тег с id > 2----", query_filter_by_id)
+    # Фильтруем теги по содержанию
     a_and_by_contains = query_filter_by_id.filter(
         Tag.name.contains('ком'),
     )
@@ -273,43 +281,17 @@ def show_methods():
     session.close()
 
 
-# Создадим стартовый набор таблиц в БД
-def create_tables():
-    print("-------------\nСоздание стартового набора таблиц БД")
-    session = Session()
-    standard_user: User = User(username='start_user')
-    session.add(standard_user)
-    session.flush(session)
-    session.commit()
-    session.close()
-    print("Стандартный пользователь 'start_user' внесен в БД")
-
-
-# Создаем базу и наполняем стандартным набором тегов
-def base_create():
-    Base.metadata.create_all()
-    create_tables()
-    create_standard_tags()
-
-
-# Делаем проверку наличия БД в текущей папке
-def is_base_exists():
-    if os.path.isfile(expected_db_path) and os.path.exists(expected_db_path):
-        print("База данных в наличии.")
-    else:
-        base_create()
-        print("Базы данных не было. Теперь она создана.")
-
-
 def main():
     """
         :return:
         """
-    print("Проверим наличие БД")
     is_base_exists()
     print("Залогинимся?")
     login_user()
-    create_users_posts(cur_user)
+    show_existing_tags()
+    add_tags_to_posts()
+    show_join()
+    show_methods()
 
 
 if __name__ == '__main__':
