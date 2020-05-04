@@ -126,10 +126,9 @@ def show_existing_tags():
     session = Session()
     q_tags = session.query(Tag)
     tag = q_tags.first()
-    print("(Первый тег) tag = q_tags.first()", tag)
+    print("(Первый тег) .first()", tag)
     print("Теги к постам", tag.posts)
     tags1 = q_tags.all()
-    tags2 = list(q_tags)
     print("Все теги методом .all()",tags1)
 
 
@@ -165,19 +164,20 @@ def add_tags_to_posts():
     print(decor)
     print("Добавляем теги к постам:")
     session = Session()
-
+    # Назначим первый тег первому посту
     tag = session.query(Tag).first()
     post: Post = session.query(Post).first()
     post.tags.append(tag)
 
-    # tag_war = session.query(Tag.name).filter(
-    #     Tag.name.contains("боевик")
-    # )
-    # post_first: Post = session.query(Post).first()
-    # post_first.tags.append(tag_war)
+    # Назначим тег содержащий "боевик" посту содержащему "Гладиатор"
+    post_war = session.query(Post).filter(Post.title.contains('Гладиатор')).one()
+    tag_war = session.query(Tag).filter(Tag.name.contains('боевик')).one()
+    post_war.tags.append(tag_war)
     session.commit()
     print("Пост -", post, "с тегом -", post.tags)
     print("Тег -", tag,"к посту -", tag.posts)
+    print("Пост -", post_war, "с тегом -", post_war.tags)
+    print("Тег -", tag_war, "к посту -", tag_war.posts)
     session.close()
 
 
@@ -204,39 +204,43 @@ def show_join():
 
 def show_methods():
     print("Разбираем методы")
-
     session = Session()
-
     query_first_tag = session.query(Tag).filter(Tag.id == 1)
-    # print("Первый тег:", query_first_tag)
-    # print("Тип:", type(query_first_tag))
     print("Список первого тега через list", list(query_first_tag))
     print("Список первого тега через .all",query_first_tag.all())
-
-    # query_tag = q_tags.filter(
-        #     or_(
-        #         Tag.id > 2,
-        #         Tag.name.contains('o'),
-        #     )
-        # )
     query_tag = session.query(Tag.name).filter(
         Tag.name.contains("боевик")
     )
-    # print("Tag.name.contains(тяжкие) - ", query_tag)
-
     print("Tag.name.contains(боевик) .all ", query_tag.all())
-    # print(type(query_tag))
-    # print(list(q))
-    # res = q.all()
-    # print([r for r, in res])
-
     q_user = session.query(User.username).filter(User.id == 1)
     user = q_user.one()
     print("User.id == 1 ->", user)
-
     # Берем первого пользователя из запроса
     res_username = q_user.scalar()
     print('username:', res_username)
+
+
+def show_posts_and_tags():
+    session = Session()
+    query_posts = session.query(Post)
+    # query_tags = session.query(Tag)
+    query_posts = query_posts.all()
+    print("Вывести все посты и их теги:")
+    for post in query_posts:
+        print(post, post.tags)
+
+
+def show_posts_without_tags():
+    session = Session()
+    query_posts = session.query(Post)
+    # query_tags = session.query(Tag)
+    query_posts = query_posts.all()
+    print("Вывести все посты без тегов:")
+    for post in query_posts:
+        if post.tags:
+            pass
+        else:
+            print(post)
 
 
 def main():
@@ -245,6 +249,8 @@ def main():
     add_tags_to_posts()
     show_join()
     show_methods()
+    show_posts_and_tags()
+    show_posts_without_tags()
 
 
 if __name__ == '__main__':
