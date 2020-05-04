@@ -217,6 +217,15 @@ def show_posts_without_tags():
     session.close()
 
 
+def show_all_posts_of_user():
+    session = Session()
+    query_posts = session.query(Post).filter(User.id == 1)
+    print("Вывести все посты пользователя с id==1:")
+    for post in query_posts:
+        print(post)
+    session.close()
+
+
 def main():
     is_base_exists()
     show_existing_tags()
@@ -225,6 +234,7 @@ def main():
     show_methods()
     show_posts_and_tags()
     show_posts_without_tags()
+    show_all_posts_of_user()
 
 
 if __name__ == '__main__':
