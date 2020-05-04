@@ -74,13 +74,13 @@ def is_base_exists():
         print("База данных в наличии.")
     else:
         base_create()
-        print("Базы данных не было. Теперь она создана.")
 
 
 # Создаем базу и наполняем стандартным набором тегов
 def base_create():
     Base.metadata.create_all()
     create_tables_and_tags()
+    print("Базы данных не было. Теперь она создана.")
 
 
 # Создадим стартовый набор таблиц в БД
@@ -105,7 +105,7 @@ def create_tables_and_tags():
 def login_user():
     session = Session()
     print("Вытащим список всех существующих пользователей из БД перед логином.")
-    query_users = session.query(User)
+    query_users = session.query(User.username)
     existed_users = set(query_users)
     print("Список пользователей в БД перед логином:", existed_users)
     user_to_login = input("Укажите имя пользователя для вносимых постов:")
@@ -125,7 +125,7 @@ def login_user():
 def create_new_user(user_to_login):
     # Вытащим список всех существующих пользователей из БД
     session = Session()
-    query_users = session.query(User)
+    query_users = session.query(User.username)
     existed_users = set(query_users)
     print("Список пользователей в БД перед созданием нового пользователя:", existed_users)
     new_username = input("Введите имя пользователя: ")
@@ -178,16 +178,16 @@ def create_users_posts(new_username):
 
 def show_posts():
     session = Session()
-    query_users = session.query(User)
+    query_users = session.query(User.username)
     existed_users = set(query_users)
     print("Список пользователей в БД перед запросом постов:", existed_users)
     new_username = input("Укажите имя пользователя: ")
-    user = session.query(User).filter_by(username=new_username).first()
-    user_posts = session.query(Post).filter_by(user_id=user.id)
+    user = session.query(User.username).filter_by(username=new_username).first()
+    user_posts = session.query(Post).filter_by(user_id=user.id).first()
     user_posts = set(user_posts)
     if new_username not in existed_users:
         print("Выбран несуществующий пользователь.")
-        print(' -*-' * 100)
+        print(' -*-' * 20)
         show_posts()
     else:
         for post in user_posts:
@@ -319,8 +319,8 @@ def main():
     print("Залогинимся?")
     login_user()
     show_existing_tags()
-    add_tags_to_posts()
-    show_join()
+    # add_tags_to_posts()
+    # show_join()
     show_posts()
     # show_methods()
 
