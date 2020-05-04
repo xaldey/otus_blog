@@ -129,38 +129,12 @@ def show_existing_tags():
     print("(Первый тег) .first()", tag)
     print("Теги к постам", tag.posts)
     tags1 = q_tags.all()
-    print("Все теги методом .all()",tags1)
-
-
-    # q_f_by_id = q_tags.filter(
-    #     Tag.id > 2,
-    # )
-    # print(q_f_by_id)
-    # print(q_f_by_id.all())
-    #
-    # a_and_by_contains = q_f_by_id.filter(
-    #     Tag.name.contains('g'),
-    # )
-    # print(a_and_by_contains)
-    # print(a_and_by_contains.all())
-    #
-    # q = q_tags.filter(
-    #     or_(
-    #         Tag.id > 2,
-    #         Tag.name.contains('o'),
-    #     )
-    # )
-    #
-    # print(q)
-    # print(q.all())
-
+    for tag in tags1:
+        print("Все теги методом .all()", tag)
     session.close()
 
 
 def add_tags_to_posts():
-    """
-    :return:
-    """
     print(decor)
     print("Добавляем теги к постам:")
     session = Session()
@@ -182,9 +156,6 @@ def add_tags_to_posts():
 
 
 def show_join():
-    """
-    :return:
-    """
     print(decor)
     print("Разбираем join")
     session = Session()
@@ -196,13 +167,13 @@ def show_join():
         User.id == Post.user_id,
     ).filter(
         Post.title.contains('Гамми')
-        # Post.tags.any(Tag.id == 1)
     )
-    # print("Post.title.contains('тяжкие')", query_join)
     print("Post.title.contains('Гамми')", query_user_join.all())
+    session.close()
 
 
 def show_methods():
+    print(decor)
     print("Разбираем методы")
     session = Session()
     query_first_tag = session.query(Tag).filter(Tag.id == 1)
@@ -218,6 +189,7 @@ def show_methods():
     # Берем первого пользователя из запроса
     res_username = q_user.scalar()
     print('username:', res_username)
+    session.close()
 
 
 def show_posts_and_tags():
@@ -228,6 +200,7 @@ def show_posts_and_tags():
     print("Вывести все посты и их теги:")
     for post in query_posts:
         print(post, post.tags)
+    session.close()
 
 
 def show_posts_without_tags():
@@ -241,6 +214,7 @@ def show_posts_without_tags():
             pass
         else:
             print(post)
+    session.close()
 
 
 def main():

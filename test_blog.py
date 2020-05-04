@@ -1,4 +1,4 @@
-from main_old import User, Post, Tag
+from myblog import User, Post, Tag
 import sqlite3
 import os.path
 import datetime
@@ -6,14 +6,13 @@ import pathlib
 import pytest
 
 expected_db_path = 'myblog.db'
-path = ''
 
 
 def is_file_exists():
     path = pathlib.Path(input('Введите имя файла БД: '))
     print('Сравним', path,'и', expected_db_path)
 
-    if (path.is_file() and path.exists()):
+    if path.is_file() and path.exists():
         print('Файл', path,'в наличии.')
         if str(path) == str(expected_db_path):
             print('И это правильный и рабочий файл! :)')
@@ -59,13 +58,6 @@ class TestBlog:
             print(results)
         else:
             print('Подключение к БД не удалось!')
-
-
-#     def test_is_posts_exists(self, args):
-#         pass
-#
-#     def test_is_tags_exists(self, args):
-#         pass
 
 
 if __name__ == '__main__':
