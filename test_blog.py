@@ -1,4 +1,4 @@
-from main import User, Post, Tag
+from main_old import User, Post, Tag
 import sqlite3
 import os.path
 import datetime

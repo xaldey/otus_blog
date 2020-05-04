@@ -58,6 +58,9 @@ class Tag(Base):
         return f'<Tag #{self.id} {self.name}>'
 
 
+
+
+
 def create_users_posts():
     session = Session()
 
@@ -65,47 +68,77 @@ def create_users_posts():
     session.add(user)
     session.flush(session)
 
-    post1 = Post(user_id=user.id, title='Flask lesson', text='faluhferui fhrifh r')
-    post2 = Post(user_id=user.id, title='Django lesson', text='vneotnqporgnsdgj')
+    print("Создаем посты от имени пользователя: ", user)
+    print('------создаем посты-----')
+    post1 = Post(user_id=user.id, title='Обзор фильма "Во все тяжкие"',
+                 text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"')
+    post2 = Post(user_id=user.id, title='Обзор фильма "Гладиатор"',
+                 text='Здесь находится большой текст-описание обзора фильма "Гладиатор"')
+    post3 = Post(user_id=user.id, title='Обзор фильма "Терминатор"',
+                 text='Здесь находится большой текст-описание обзора фильма "Терминатор"')
+    post4 = Post(user_id=user.id, title='Обзор фильма "Мишки Гамми"',
+                 text='Здесь находится большой текст-описание обзора фильма "Мишки Гамми"')
+    post5 = Post(user_id=user.id, title='Обзор фильма "Кремниевая долина"',
+                 text='Здесь находится большой текст-описание обзора фильма "Кремниевая долина"')
     session.add(post1)
     session.add(post2)
+    session.add(post3)
+    session.add(post4)
+    session.add(post5)
 
     session.commit()
     session.close()
 
 
+def create_start_tags():
+    session = Session()
+    standard_tags = ('комедия', 'боевик', 'ужасы', 'мультфильм', 'документалка')
+    for tag in standard_tags:
+        tag = Tag(name=tag)
+        session.add(tag)
+        print("Тег", tag.name, "внесен в список тегов")
+    print("-----------------Список тегов обновлен----------------")
+    session.commit()
+    session.close()
+
+
 def show_existing_tags():
+    print("-*-" * 20)
+    print("show_existing_tags():")
+    print("-*-" * 20)
     session = Session()
 
     q_tags = session.query(Tag)
     tag = q_tags.first()
-    print(tag)
+    print("tag = q_tags.first()", tag)
     print(tag.posts)
-    # tags = q_tags.all()
-    tags = list(q_tags)
-    print(tags)
+    tags1 = q_tags.all()
+    tags2 = list(q_tags)
+    print("tags1 = q_tags.all()",tags1)
+    print("tags2 = list(q_tags)",tags2)
 
-    q_f_by_id = q_tags.filter(
-        Tag.id > 2,
-    )
-    print(q_f_by_id)
-    print(q_f_by_id.all())
 
-    a_and_by_contains = q_f_by_id.filter(
-        Tag.name.contains('g'),
-    )
-    print(a_and_by_contains)
-    print(a_and_by_contains.all())
-
-    q = q_tags.filter(
-        or_(
-            Tag.id > 2,
-            Tag.name.contains('o'),
-        )
-    )
-
-    print(q)
-    print(q.all())
+    # q_f_by_id = q_tags.filter(
+    #     Tag.id > 2,
+    # )
+    # print(q_f_by_id)
+    # print(q_f_by_id.all())
+    #
+    # a_and_by_contains = q_f_by_id.filter(
+    #     Tag.name.contains('g'),
+    # )
+    # print(a_and_by_contains)
+    # print(a_and_by_contains.all())
+    #
+    # q = q_tags.filter(
+    #     or_(
+    #         Tag.id > 2,
+    #         Tag.name.contains('o'),
+    #     )
+    # )
+    #
+    # print(q)
+    # print(q.all())
 
     session.close()
 
@@ -114,6 +147,9 @@ def add_tags_to_posts():
     """
     :return:
     """
+    print("-*-" * 20)
+    print("add_tags_to_posts():")
+    print("-*-" * 20)
     session = Session()
 
     tag = session.query(Tag).first()
@@ -121,7 +157,6 @@ def add_tags_to_posts():
     # post.tags.append(tag)
     #
     # session.commit()
-
     print(post, post.tags)
     print(tag, tag.posts)
 
@@ -138,14 +173,16 @@ def show_join():
         Post,
         User.id == Post.user_id,
     ).filter(
-        # Post.title.contains('flask')
-        Post.tags.any(Tag.id == 1)
+        Post.title.contains('тяжкие')
+        # Post.tags.any(Tag.id == 1)
     )
-    print(q)
-    print(q.all())
+    print("Post.title.contains('тяжкие')", q)
+    print("Post.title.contains('тяжкие')", q.all())
 
 
 def show_methods():
+    print("show_methods():")
+
     session = Session()
 
     q = session.query(Tag).filter(Tag.id == 1)
@@ -170,15 +207,14 @@ def show_methods():
 
 
 def main():
-    """
-    :return:
-    """
     Base.metadata.create_all()
     create_users_posts()
+    create_start_tags()
     show_existing_tags()
     add_tags_to_posts()
     show_join()
     show_methods()
+
 
 if __name__ == '__main__':
     main()
