@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, Text, Boolean, ForeignKey, Table, or_
 from sqlalchemy.orm import relationship, sessionmaker, scoped_session, joinedload
 from sqlalchemy.ext.declarative import declarative_base
+import os
 
 engine = create_engine('sqlite:///myblog.db')
 Base = declarative_base(bind=engine)
@@ -8,6 +9,9 @@ Base = declarative_base(bind=engine)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
+# Переменная для сверки местоположения БД
+EXPECTED_DB_PATH = 'myblog.db'
+decor = ' #' * 15
 
 posts_tags_table = Table(
     'tags_posts',
@@ -58,7 +62,20 @@ class Tag(Base):
         return f'<Tag #{self.id} {self.name}>'
 
 
+# Делаем проверку наличия БД в текущей папке
+def is_base_exists():
+    print("Проверим наличие БД")
+    if os.path.isfile(EXPECTED_DB_PATH) and os.path.exists(EXPECTED_DB_PATH):
+        print("База данных в наличии.")
+    else:
+        base_create()
 
+
+# Создаем базу и наполняем стандартным набором тегов
+def base_create():
+    Base.metadata.create_all()
+    create_users_posts()
+    print("Базы данных не было. Теперь она создана.")
 
 
 def create_users_posts():
@@ -88,6 +105,7 @@ def create_users_posts():
 
     session.commit()
     session.close()
+    create_start_tags()
 
 
 def create_start_tags():
@@ -103,19 +121,16 @@ def create_start_tags():
 
 
 def show_existing_tags():
-    print("-*-" * 20)
-    print("show_existing_tags():")
-    print("-*-" * 20)
+    print(decor)
+    print("Все имеющиеся теги")
     session = Session()
-
     q_tags = session.query(Tag)
     tag = q_tags.first()
-    print("tag = q_tags.first()", tag)
-    print(tag.posts)
+    print("(Первый тег) tag = q_tags.first()", tag)
+    print("Теги к постам", tag.posts)
     tags1 = q_tags.all()
     tags2 = list(q_tags)
-    print("tags1 = q_tags.all()",tags1)
-    print("tags2 = list(q_tags)",tags2)
+    print("Все теги методом .all()",tags1)
 
 
     # q_f_by_id = q_tags.filter(
@@ -147,69 +162,85 @@ def add_tags_to_posts():
     """
     :return:
     """
-    print("-*-" * 20)
-    print("add_tags_to_posts():")
-    print("-*-" * 20)
+    print(decor)
+    print("Добавляем теги к постам:")
     session = Session()
 
     tag = session.query(Tag).first()
     post: Post = session.query(Post).first()
-    # post.tags.append(tag)
-    #
-    # session.commit()
-    print(post, post.tags)
-    print(tag, tag.posts)
+    post.tags.append(tag)
+
+    # tag_war = session.query(Tag.name).filter(
+    #     Tag.name.contains("боевик")
+    # )
+    # post_first: Post = session.query(Post).first()
+    # post_first.tags.append(tag_war)
+    session.commit()
+    print("Пост -", post, "с тегом -", post.tags)
+    print("Тег -", tag,"к посту -", tag.posts)
+    session.close()
 
 
 def show_join():
     """
     :return:
     """
+    print(decor)
+    print("Разбираем join")
     session = Session()
 
-    q = session.query(
+    query_user_join = session.query(
         User,
     ).join(
         Post,
         User.id == Post.user_id,
     ).filter(
-        Post.title.contains('тяжкие')
+        Post.title.contains('Гамми')
         # Post.tags.any(Tag.id == 1)
     )
-    print("Post.title.contains('тяжкие')", q)
-    print("Post.title.contains('тяжкие')", q.all())
+    # print("Post.title.contains('тяжкие')", query_join)
+    print("Post.title.contains('Гамми')", query_user_join.all())
 
 
 def show_methods():
-    print("show_methods():")
+    print("Разбираем методы")
 
     session = Session()
 
-    q = session.query(Tag).filter(Tag.id == 1)
-    print(q)
-    print(type(q))
-    print(list(q))
-    print(q.all())
+    query_first_tag = session.query(Tag).filter(Tag.id == 1)
+    # print("Первый тег:", query_first_tag)
+    # print("Тип:", type(query_first_tag))
+    print("Список первого тега через list", list(query_first_tag))
+    print("Список первого тега через .all",query_first_tag.all())
 
-    q = session.query(Tag.name).filter(Tag.id.in_([1, 2, 4]))
-    print(q)
-    print(type(q))
+    # query_tag = q_tags.filter(
+        #     or_(
+        #         Tag.id > 2,
+        #         Tag.name.contains('o'),
+        #     )
+        # )
+    query_tag = session.query(Tag.name).filter(
+        Tag.name.contains("боевик")
+    )
+    # print("Tag.name.contains(тяжкие) - ", query_tag)
+
+    print("Tag.name.contains(боевик) .all ", query_tag.all())
+    # print(type(query_tag))
     # print(list(q))
-    res = q.all()
-    print([r for r, in res])
+    # res = q.all()
+    # print([r for r, in res])
 
     q_user = session.query(User.username).filter(User.id == 1)
     user = q_user.one()
-    print(user)
+    print("User.id == 1 ->", user)
 
+    # Берем первого пользователя из запроса
     res_username = q_user.scalar()
     print('username:', res_username)
 
 
 def main():
-    Base.metadata.create_all()
-    create_users_posts()
-    create_start_tags()
+    is_base_exists()
     show_existing_tags()
     add_tags_to_posts()
     show_join()
