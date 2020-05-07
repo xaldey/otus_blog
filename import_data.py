@@ -1,5 +1,5 @@
 from create_db import decor, Session
-from create_models import Post, User, Tag
+from models import Post, User, Tag
 
 
 def create_users_posts():
