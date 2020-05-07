@@ -1,7 +1,4 @@
-from myblog import User, Post, Tag
 import sqlite3
-import os.path
-import datetime
 import pathlib
 import pytest
 
