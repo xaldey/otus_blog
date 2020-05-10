@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
+<html lang="ru">
+<head>
 
     <!-- Meta Tag -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Контакты</title>
+    <title>Мой блог | Главная</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="images/favicon/favicon.ico">
-    <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="images/favicon/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../static/images/favicon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="../static/images/favicon/apple-touch-icon.png">
 
     <!-- All CSS Plugins -->
-    <link rel="stylesheet" type="text/css" href="css/plugin.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/plugin.css">
 
     <!-- Main CSS Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 
     <!-- Google Web Fonts  -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,300,500,600,700">
+    <link rel="stylesheet" href="../static/fonts/FontAwesome.otf">
 
 
     <!-- HTML5 shiv and Respond.js support IE8 or Older for HTML5 elements and media queries -->
@@ -30,8 +29,7 @@
 	   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-
-  </head>
+</head>
 
  <body>
 
@@ -45,13 +43,12 @@
         <div class="container">
             <div class="row">
                 <!-- About Me (Left Sidebar) Start -->
-                 <div class="col-md-3">
+                <aside class="col-md-3">
                    <div class="about-fixed">
-
                      <div class="my-pic">
-                        <img src="images/pic/my-pic.jpg" alt="">
-                        <a href="javascript:void(0)" class="collapsed" data-target="#menu" data-toggle="collapse"><i class="icon-menu menu"></i></a>
-                         <div id="menu" class="collapse">
+                        <img alt="Аватарка" src="../static/images/pic/my-pic.jpg">
+                        <a class="collapsed" data-target="#menu" data-toggle="collapse" href="javascript:void(0)"><i class="icon-menu menu"></i></a>
+                         <div class="collapse" id="menu">
                            <ul class="menu-link">
                                <li><a href="index.html">Главная</a></li>
                                <li><a href="single_post.html">Случайный пост</a></li>
@@ -67,7 +64,7 @@
                         </div>
                       </div>
                   </div>
-                </div>
+                </aside>
                 <!-- About Me (Left Sidebar) End -->
 
          <!-- Contact (Right Sidebar) Start -->
@@ -106,7 +103,7 @@
 								  <div class="testimonial-client-info">
 
                                     <div class="testimonial-client client-thumb">
-								      <img src="images/testimonial/1.jpg" alt="">
+								      <img src="../static/images/testimonial/1.jpg" alt="Александр Невский">
 									</div>
 
                                     <div class="client-text">
@@ -124,7 +121,7 @@
 								  <div class="testimonial-client-info">
 
                                     <div class="testimonial-client client-thumb">
-								      <img src="images/testimonial/2.jpg" alt="">
+								      <img src="../static/images/testimonial/2.jpg" alt="Володя">
 									</div>
 
                                     <div class="client-text">
@@ -142,7 +139,7 @@
 								  <div class="testimonial-client-info">
 
                                     <div class="testimonial-client client-thumb">
-								      <img src="images/testimonial/3.jpg" alt="">
+								      <img src="../static/images/testimonial/3.jpg" alt="Владлена Куприна">
 									</div>
 
                                     <div class="client-text">
@@ -227,13 +224,12 @@
     <a href="#" class="scroll-to-top"><i class="fa fa-long-arrow-up"></i></a>
     <!-- Back to Top End -->
 
-
     <!-- All Javascript Plugins  -->
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/plugin.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/plugin.js"></script>
 
     <!-- Main Javascript File  -->
-    <script type="text/javascript" src="js/scripts.js"></script>
+    <script src="../static/js/scripts.js"></script>
 
 
    </body>
