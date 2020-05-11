@@ -44,7 +44,7 @@ def register():
         return redirect(url_for("auth_app.index"))
 
     if request.method == "GET":
-        return render_template("auth/register.html")
+        return render_template("auth/register_static.html")
 
     username, password = get_username_and_password()
     validate_username_unique(username)
