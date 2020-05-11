@@ -2,10 +2,10 @@ from sqlalchemy import create_engine, Column, Integer, ForeignKey, Table
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 import os
+from . import Base
 
 
-engine = create_engine('sqlite:///models/myblog.db')
-Base = declarative_base(bind=engine, cls=Base)
+engine = create_engine('sqlite:///myblog.db')
 
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
@@ -29,14 +29,6 @@ def is_base_exists():
         print("База данных в наличии.")
     else:
         base_create()
-
-
-class Base:
-    @declared_attr
-    def __tablename__(self):
-        return f"myapp_{self.__name__.lower()}"
-
-    id = Column(Integer, primary_key=True)
 
 
 # Создаем базу и наполняем стандартным набором тегов

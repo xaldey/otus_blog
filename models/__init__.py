@@ -1,10 +1,13 @@
-from .db import Session
-from .base import Base
-from .user import User
-
+from .create_db import is_base_exists, Session, decor, posts_tags_table, engine
+from .models import User, Post, Tag
 
 __all__ = [
     "Session",
-    "Base",
+    "engine",
+    "posts_tags_table",
+    "decor",
     "User",
+    "is_base_exists",
+    "Post",
+    "Tag",
 ]

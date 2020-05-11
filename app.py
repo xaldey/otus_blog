@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 from flask_login.login_manager import LoginManager
 
-from models.create_db import Session
-from models.models import User
+from models import Session
+from models import User
 from views import auth_app
 
 

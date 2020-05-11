@@ -1,8 +1,20 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from models.create_db import Base, posts_tags_table
+from models import posts_tags_table
 import hashlib
 from flask_login import UserMixin
+from sqlalchemy.ext.declarative import declared_attr, declarative_base
+from . import engine
+
+class Base:
+    @declared_attr
+    def __tablename__(self):
+        return f"myapp_{self.__name__.lower()}"
+
+    id = Column(Integer, primary_key=True)
+
+
+Base = declarative_base(bind=engine, cls=Base)
 
 
 class User(Base, UserMixin):
