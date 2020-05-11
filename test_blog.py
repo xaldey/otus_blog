@@ -2,7 +2,7 @@ import sqlite3
 import pathlib
 import pytest
 
-expected_db_path = 'myblog.db'
+expected_db_path = 'models/myblog.db'
 
 
 def is_file_exists():
@@ -28,7 +28,7 @@ class TestBlog:
         'args, expected_result',
         [
             pytest.param('test_blog.py', 'wrong_file.py'),
-            pytest.param('myblog.db', 'myblog.db')
+            pytest.param('models/myblog.db', 'models/myblog.db')
         ]
     )
     def test_is_file_exists(self, args, expected_result):
@@ -39,14 +39,14 @@ class TestBlog:
             print('Указанного файла', args, 'нет на диске!')
 
     def test_file_correct(self):
-        path_db = 'myblog.db'
+        path_db = 'models/myblog.db'
         if str(path_db) == str(expected_db_path):
             print('Имя файла', path_db, 'верно!')
         else:
             print('Имя файла', path_db, 'неверно!')
 
     def test_connect_to_db(self):
-        path = 'myblog.db'
+        path = 'models/myblog.db'
         if path == expected_db_path:
             conn = sqlite3.connect(path)
             cursor = conn.cursor()

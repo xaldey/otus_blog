@@ -1,22 +1,38 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from create_db import Base, posts_tags_table
+from models.create_db import Base, posts_tags_table
+import hashlib
+from flask_login import UserMixin
 
 
-class User(Base):
-    __tablename__ = 'users'
+class User(Base, UserMixin):
+    username = Column(String(64), unique=True, nullable=False)
+    _password = Column("password", String(32), nullable=False)
 
-    id = Column(Integer, primary_key=True)
-    username = Column(String(30), nullable=False, unique=True)
+    def __init__(self, username: str, password: str):
+        self.username = username
+        self.password = password
 
     posts = relationship('Post', back_populates='user')
 
     def __repr__(self):
         return f'<User #{self.id} {self.username}>'
 
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, value):
+        self._password = self.hash_password(value)
+
+    @classmethod
+    def hash_password(cls, value: str) -> str:
+        return hashlib.md5(value.encode("utf-8")).hexdigest()
+
 
 class Post(Base):
-    __tablename__ = 'posts'
+    # __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
@@ -32,7 +48,7 @@ class Post(Base):
 
 
 class Tag(Base):
-    __tablename__ = 'tags'
+    # __tablename__ = 'tags'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(10), nullable=False)
