@@ -17,6 +17,7 @@ app.register_blueprint(auth_app, url_prefix="/auth")
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return Session.query(User).filter_by(id=user_id).one_or_none()
