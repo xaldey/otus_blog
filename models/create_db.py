@@ -4,13 +4,13 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 import os
 
 
-engine = create_engine('sqlite:///myapp_myblog.db')
+engine = create_engine('sqlite:///models/myapp_myblog.db')
 
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
 # Переменная для сверки местоположения БД
-EXPECTED_DB_PATH = 'myapp_myblog.db'
+EXPECTED_DB_PATH = 'models/myapp_myblog.db'
 decor = ' #' * 15
 
 
@@ -44,7 +44,7 @@ def is_base_exists():
 
 # Создаем базу и наполняем стандартным набором тегов
 def base_create():
-    Base.metadata.create_all(Base)
+    Base.metadata.create_all(engine)
     print("Базы данных не было. Теперь она создана.")
 
 

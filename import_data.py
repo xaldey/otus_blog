@@ -5,7 +5,7 @@ from models import Post, User, Tag
 def create_users_posts():
     session = Session()
 
-    user = User(username='otus')
+    user = User(username='otus', password='123')
     session.add(user)
     session.flush(session)
 
