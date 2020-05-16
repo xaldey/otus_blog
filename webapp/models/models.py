@@ -14,7 +14,7 @@ class User(Base, UserMixin):
         self.password = password
 
     # в уроке деактивировали связь
-    # posts = relationship('Post', back_populates='user')
+    posts = relationship('Post', back_populates='user')
 
     def __repr__(self):
         return f'<User #{self.id} {self.username}>'
