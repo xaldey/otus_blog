@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from .create_db import posts_tags_table, Base
+from webapp.models.create_db import posts_tags_table, Base
 import hashlib
 from flask_login import UserMixin
 
@@ -13,7 +13,8 @@ class User(Base, UserMixin):
         self.username = username
         self.password = password
 
-    posts = relationship('Post', back_populates='user')
+    # в уроке деактивировали связь
+    # posts = relationship('Post', back_populates='user')
 
     def __repr__(self):
         return f'<User #{self.id} {self.username}>'

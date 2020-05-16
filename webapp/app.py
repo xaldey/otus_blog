@@ -1,9 +1,8 @@
 from flask import Flask, render_template
-from flask_login.login_manager import LoginManager
+from flask_login import LoginManager
 
-from webapp.models import Session
-from webapp.models import User
-from views import auth_app
+from webapp.models import Session, User
+from webapp.views import auth_app
 
 
 app = Flask(__name__)
@@ -22,7 +21,8 @@ def load_user(user_id):
     return Session.query(User).filter_by(id=user_id).one_or_none()
 
 
-@app.route("/", endpoint="index")
+# @app.route("/", endpoint="index")
+@app.route("/")
 def index():
     return render_template("index.html")
 
