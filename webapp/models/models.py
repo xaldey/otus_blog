@@ -1,17 +1,8 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from webapp.models import posts_tags_table
-from sqlalchemy.ext.declarative import declared_attr
+from .create_db import posts_tags_table, Base
 import hashlib
 from flask_login import UserMixin
-
-
-class Base:
-    @declared_attr
-    def __tablename__(self):
-        return f"myapp_{self.__name__.lower()}"
-
-    id = Column(Integer, primary_key=True)
 
 
 class User(Base, UserMixin):
@@ -41,7 +32,7 @@ class User(Base, UserMixin):
 
 
 class Post(Base):
-    # __tablename__ = 'posts'
+    __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
@@ -57,7 +48,7 @@ class Post(Base):
 
 
 class Tag(Base):
-    # __tablename__ = 'tags'
+    __tablename__ = 'tags'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(10), nullable=False)

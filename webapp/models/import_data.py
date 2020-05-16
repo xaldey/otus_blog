@@ -1,5 +1,6 @@
-from webapp.models import decor, Session
+from webapp.models import Session
 from webapp.models import Post, User, Tag
+from webapp.config import DECOR
 
 
 def create_users_posts():
@@ -45,7 +46,7 @@ def create_start_tags():
 
 
 def show_existing_tags():
-    print(decor)
+    print(DECOR)
     print("Все имеющиеся теги")
     session = Session()
     q_tags = session.query(Tag)
@@ -59,7 +60,7 @@ def show_existing_tags():
 
 
 def add_tags_to_posts():
-    print(decor)
+    print(DECOR)
     print("Добавляем теги к постам:")
     session = Session()
     # Назначим первый тег первому посту
@@ -80,7 +81,7 @@ def add_tags_to_posts():
 
 
 def show_join():
-    print(decor)
+    print(DECOR)
     print("Разбираем join")
     session = Session()
 
@@ -97,7 +98,7 @@ def show_join():
 
 
 def show_methods():
-    print(decor)
+    print(DECOR)
     print("Разбираем методы")
     session = Session()
     query_first_tag = session.query(Tag).filter(Tag.id == 1)

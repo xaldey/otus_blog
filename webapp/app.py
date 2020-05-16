@@ -7,10 +7,9 @@ from views import auth_app
 
 
 app = Flask(__name__)
-app.config.update(
-    DEBUG=True,
-    SECRET_KEY="jhsdajusgduyaygfshfgjadbvnxcbvhgdesftgyg",
-)
+app.config.from_pyfile('config.py')
+
+
 app.register_blueprint(auth_app, url_prefix="/auth")
 
 
