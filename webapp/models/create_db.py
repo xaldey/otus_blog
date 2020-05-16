@@ -1,25 +1,18 @@
 from sqlalchemy import create_engine, Column, Integer, ForeignKey, Table
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.ext.declarative import declarative_base
+from .models import Base
 import os
 
 
-engine = create_engine('sqlite:///models/myapp_myblog.db')
+engine = create_engine('sqlite:///webapp/models/myapp_myblog.db')
 
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
 # Переменная для сверки местоположения БД
-EXPECTED_DB_PATH = 'models/myapp_myblog.db'
+EXPECTED_DB_PATH = 'webapp/models/myapp_myblog.db'
 decor = ' #' * 15
-
-
-class Base:
-    @declared_attr
-    def __tablename__(self):
-        return f"myapp_{self.__name__.lower()}"
-
-    id = Column(Integer, primary_key=True)
 
 
 Base = declarative_base(bind=engine, cls=Base)
@@ -50,6 +43,8 @@ def base_create():
 
 def main():
     is_base_exists()
+
+
 
 
 if __name__ == '__main__':
