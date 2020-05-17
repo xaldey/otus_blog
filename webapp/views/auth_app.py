@@ -93,4 +93,4 @@ def logout():
 @auth_blueprint.route("/protected/", endpoint="protected")
 @login_required
 def protected():
-    return "Secret info"
+    return "!!!Это видно только залогиненным пользователям!!!"

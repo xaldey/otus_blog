@@ -2,14 +2,14 @@ from flask import Flask, render_template
 from flask_login import LoginManager
 
 from webapp.models import Session, User
-from webapp.views import auth_blueprint
-
+from webapp.views import auth_blueprint, blog_blueprint
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 
 app.register_blueprint(auth_blueprint, url_prefix="/auth")
+app.register_blueprint(blog_blueprint, url_prefix="/")
 
 
 login_manager = LoginManager()
@@ -21,7 +21,6 @@ def load_user(user_id):
     return Session.query(User).filter_by(id=user_id).one_or_none()
 
 
-# @app.route("/", endpoint="index")
 @app.route("/")
 def index():
     return render_template("index.html")

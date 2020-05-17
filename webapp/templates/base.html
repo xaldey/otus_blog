@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="../static/images/favicon/favicon.ico">
-    <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="../static/images/favicon/apple-touch-icon.png">
+    <link rel="shortcut icon" href="..\..\static\images\favicon\favicon.ico">
+    <link rel="apple-touch-icon" sizes="144x144" type="image/x-icon" href="static\images\favicon\apple-touch-icon.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -30,6 +30,31 @@
     {% block body %}
     Base body
     {% endblock %}
+</div>
+<div class="container fixed-bottom ">
+    {% block footer %}
+    <footer>
+        <!-- Footer Start -->
+        <div class="row">
+            <div class="col-md">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="single_post.html">Случайный пост</a></li>
+                    <li><a href="contact.html">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="col-md">
+                <p>© Copyright 2020 Мой блог</p>
+            </div>
+            <!-- Credit Start -->
+            <div class="col-md">
+                Обучение в <a href="https://otus.ru/learning/" target="_blank">Otus</a>
+            </div>
+            <!-- Credit End -->
+        </div>
+    </footer>
+<!-- Footer End -->
+{% endblock %}
 </div>
 <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
