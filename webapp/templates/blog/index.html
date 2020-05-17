@@ -1,22 +1,13 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Информация о пользователе
+Index blog
 {% endblock %}
 
 {% block body %}
-<div class="container">
-  <h1>Информация о пользователе:</h1>
-</div>
-<div class="container col-8">
-  <ul class="list-group col-8">
-    <li class="list-group-item">Авторизован: {{ current_user.is_authenticated }}</li>
-      {% if current_user.is_authenticated %}
-      <li class="list-group-item">Пользователь: {{ current_user.username }}</li>
-      {% endif %}
-      {% if not current_user.is_authenticated %}
-        <button class="btn btn-primary" type="submit">Войти<a href="login" target="_blank"></a></button>
-      {% endif %}
-  </ul>
-</div>
+<h1>Главная (inside blog) | Мой блог</h1>
+{% endblock %}
+
+{% block footer %}
+<h1>Footer blog</h1>
 {% endblock %}

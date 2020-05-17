@@ -13,7 +13,7 @@ logger = getLogger(__name__)
 
 @blog_blueprint.route("/", endpoint="index")
 def index():
-    return render_template("index.html", user=current_user)
+    return render_template("blog/index.html", user=current_user)
 
 
 @blog_blueprint.route("/protected/", endpoint="protected")
