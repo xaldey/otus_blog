@@ -2,14 +2,14 @@ from flask import Flask, render_template
 from flask_login import LoginManager
 
 from webapp.models import Session, User
-from webapp.views import auth_app
+from webapp.views import auth_blueprint
 
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 
-app.register_blueprint(auth_app, url_prefix="/auth")
+app.register_blueprint(auth_blueprint, url_prefix="/auth")
 
 
 login_manager = LoginManager()

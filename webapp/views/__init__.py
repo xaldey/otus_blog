@@ -1,5 +1,5 @@
-from webapp.views import auth_app
+from .auth_app import auth_blueprint
 
 __all__ = [
-    "auth_app",
+    "auth_blueprint",
 ]

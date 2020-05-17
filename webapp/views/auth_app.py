@@ -6,12 +6,12 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from webapp.models import Session, User
 
-auth_app = Blueprint("auth_app", __name__)
+auth_blueprint = Blueprint("auth", __name__)
 
 logger = getLogger(__name__)
 
 
-@auth_app.route("/", endpoint="index")
+@auth_blueprint.route("/", endpoint="index")
 def index():
     return render_template("auth/index.html", user=current_user)
 
@@ -39,10 +39,10 @@ def get_username_and_password():
     return username, password
 
 
-@auth_app.route("/register/", methods=("GET", "POST"), endpoint="register")
+@auth_blueprint.route("/register/", methods=("GET", "POST"), endpoint="register")
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("auth_app.index"))
+        return redirect(url_for("auth_blueprint.index"))
 
     if request.method == "GET":
         return render_template("auth/register.html")
@@ -64,7 +64,7 @@ def register():
     return redirect(url_for("auth_app.index"))
 
 
-@auth_app.route("/login/", methods=("GET", "POST"), endpoint="login")
+@auth_blueprint.route("/login/", methods=("GET", "POST"), endpoint="login")
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("auth_app.index"))
@@ -84,13 +84,13 @@ def login():
     return redirect(url_for("auth_app.index"))
 
 
-@auth_app.route("/logout/", endpoint="logout")
+@auth_blueprint.route("/logout/", endpoint="logout")
 def logout():
     logout_user()
     return redirect(url_for("auth_app.login"))
 
 
-@auth_app.route("/protected/", endpoint="protected")
+@auth_blueprint.route("/protected/", endpoint="protected")
 @login_required
 def protected():
     return "Secret info"
