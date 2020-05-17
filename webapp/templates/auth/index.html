@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Index auth
+Информация о пользователе
 {% endblock %}
 
 {% block body %}
-<h1>User info:</h1>
+<h1>Информация о пользователе:</h1>
 <ul class="list-group">
-  <li class="list-group-item">Authenticated: {{ current_user.is_authenticated }}</li>
+  <li class="list-group-item">Авторизован: {{ current_user.is_authenticated }}</li>
     {% if current_user.is_authenticated %}
-    <li class="list-group-item">Username: {{ current_user.username }}</li>
+    <li class="list-group-item">Пользователь: {{ current_user.username }}</li>
     {% endif %}
 </ul>
 {% endblock %}

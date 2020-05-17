@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Register auth
+Регистрация
 {% endblock %}
 
 {% block body %}
-<h1>Register here:</h1>
+<h1>Регистрация пользователя:</h1>
 <form method="post">
   <div class="form-group">
-    <label for="exampleInputUsername1">Username</label>
+    <label for="exampleInputUsername1">Имя пользователя</label>
     <input type="text" name="username" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp">
-    <small id="emailHelp" class="form-text text-muted">Username has at least 3 symbols</small>
+    <small id="emailHelp" class="form-text text-muted">Имя пользователя должно быть не короче 3 символов</small>
   </div>
   <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
+    <label for="exampleInputPassword1">Пароль</label>
     <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+    <small id="passwordHelp" class="form-text text-muted">Пароль должен быть не короче 8 символов</small>
   </div>
-  <button type="submit" class="btn btn-primary">Register</button>
+  <button type="submit" class="btn btn-primary">Зарегистрировать</button>
 </form>
 {% endblock %}

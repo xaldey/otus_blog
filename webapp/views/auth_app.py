@@ -42,7 +42,7 @@ def get_username_and_password():
 @auth_blueprint.route("/register/", methods=("GET", "POST"), endpoint="register")
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("auth_blueprint.index"))
+        return redirect(url_for("auth.index"))
 
     if request.method == "GET":
         return render_template("auth/register.html")
@@ -61,13 +61,13 @@ def register():
         raise InternalServerError(f"Could not create user! Error: {e}")
 
     login_user(user)
-    return redirect(url_for("auth_app.index"))
+    return redirect(url_for("auth.index"))
 
 
 @auth_blueprint.route("/login/", methods=("GET", "POST"), endpoint="login")
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("auth_app.index"))
+        return redirect(url_for("auth.index"))
 
     if request.method == "GET":
         return render_template("auth/login.html")
@@ -81,13 +81,13 @@ def login():
         return render_template("auth/login.html", error_text="Invalid username or password!")
 
     login_user(user)
-    return redirect(url_for("auth_app.index"))
+    return redirect(url_for("auth.index"))
 
 
 @auth_blueprint.route("/logout/", endpoint="logout")
 def logout():
     logout_user()
-    return redirect(url_for("auth_app.login"))
+    return redirect(url_for("auth.login"))
 
 
 @auth_blueprint.route("/protected/", endpoint="protected")
