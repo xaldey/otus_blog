@@ -55,25 +55,21 @@
 
 {% block footer %}
 <!-- Footer Start -->
-<footer>
-<nav class="navbar fixed-bottom navbar-light bg-light ">
-    <div class="row">
-        <div>
-            <ul>
-                <li><a href="/">Главная</a></li>
-                <li><a href="single_post.html">Случайный пост</a></li>
-                <li><a href="contact.html">Контакты</a></li>
-            </ul>
-        </div>
-        <div>
-            <p>© Copyright 2020 Мой блог</p>
-        </div>
-        <!-- Credit Start -->
-        <div>
-            Обучение в <a href="https://otus.ru/learning/" target="_blank">Otus</a>
-        </div>
-        <!-- Credit End -->
+<footer class="container">
+<nav class="navbar fixed-bottom navbar-light bg-light">
+    <div class="col-2">
+        <p>© Copyright 2020 Мой блог</p>
     </div>
+    <div>
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="single_post.html">Случайный пост</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+        </ul>
+    </div>
+        <!-- Credit Start -->
+    <p class="col-2">Обучение в <a href="https://otus.ru/learning/" target="_blank">Otus</a></p>
+        <!-- Credit End -->
 </nav>
 </footer>
 <!-- Footer End -->
