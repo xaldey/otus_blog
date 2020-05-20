@@ -16,6 +16,11 @@ def index():
     return render_template("blog/index.html", user=current_user)
 
 
+@blog_blueprint.route("/login", endpoint="login")
+def login():
+    return render_template("auth/login.html")
+
+
 @blog_blueprint.route("/protected/", endpoint="protected")
 @login_required
 def protected():

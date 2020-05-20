@@ -4,42 +4,12 @@
 Мой блог
 {% endblock %}
 
+
 {% block body %}
-<!-- Image and text -->
-<nav class="navbar sticky-top navbar-light bg-light">
-  <a class="navbar-brand" href="#">
-    <img src="static\images\favicon\apple-touch-icon.png" width="30" height="30" class="d-inline-block align-top" alt="Logo" loading="lazy">
-    Обзорник
-  </a>
-  {% if current_user.is_authenticated %}
-    <h4>Привет, {{ current_user.username }}</h4>
-  {% endif %}
-  {% if not current_user.is_authenticated %}
-   <h4>Привет, аноним!</h4>
-  {% endif %}
-</nav>
-
-
 <article class="article">Блок для поста</article>
 <article class="article">Блок для поста</article>
 <article class="article">Блок для поста</article>
 <article class="article">Блок для поста</article>
 <article class="article">Блок для поста</article>
-
-<div class="container col-sm">
-  <ul class="list-group col">
-    <li class="list-group-item">Авторизован: {{ current_user.is_authenticated }}</li>
-      {% if current_user.is_authenticated %}
-      <li class="list-group-item">Пользователь: {{ current_user.username }}</li>
-      <button class="btn btn-primary" type="submit">Выйти<a href="auth/logout/"></a></button>
-      {% endif %}
-      {% if not current_user.is_authenticated %}
-        <button class="btn btn-primary" type="submit">Войти<a href="login.html" target="_blank"></a></button>
-      {% endif %}
-  </ul>
-</div>
-
 {% endblock %}
 
-{% block footer %}
-{% endblock %}
