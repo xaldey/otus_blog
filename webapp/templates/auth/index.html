@@ -13,9 +13,10 @@
     <li class="list-group-item">Авторизован: {{ current_user.is_authenticated }}</li>
       {% if current_user.is_authenticated %}
       <li class="list-group-item">Пользователь: {{ current_user.username }}</li>
+      <button class="btn btn-primary" type="submit">Выйти<a href="auth/logout/"></a></button>
       {% endif %}
       {% if not current_user.is_authenticated %}
-        <button class="btn btn-primary" type="submit">Войти<a href="login" target="_blank"></a></button>
+        <button class="btn btn-primary" type="submit">Войти<a href="login.html" target="_blank"></a></button>
       {% endif %}
   </ul>
 </div>
