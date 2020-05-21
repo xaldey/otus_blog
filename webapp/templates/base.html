@@ -25,24 +25,27 @@
         {% endblock %}
     </title>
 </head>
-<div>
 
 {% block nav %}
     <div class="container-fluid">
         <!-- Nav menu -->
-        <nav class="navbar sticky-top navbar-light bg-light">
+        <nav class="navbar sticky-top navbar-light bg-light ">
             <a class="navbar-brand" href="/">
                     <img alt="Logo" class="d-inline-block align-top" height="30" loading="lazy" src="/static/images/favicon/logo.png" width="30">
                     Обзорник
             </a>
-            {% if current_user.is_authenticated %}
+            <div class="d-flex justify-content-end row">
+                <div class="mr-auto">
+                {% if current_user.is_authenticated %}
                 <h4>Привет, {{ current_user.username }}</h4>
+                </div>
                 <button class="btn btn-primary" type="submit">Выйти<a href="logout"></a></button>
             {% endif %}
             {% if not current_user.is_authenticated %}
                 <h4>Привет, аноним!</h4>
                 <button class="btn btn-primary" type="submit">Войти<a href="auth/login.html" target="_blank"></a></button>
             {% endif %}
+            </div>
         </nav>
     </div>
     {% endblock %}

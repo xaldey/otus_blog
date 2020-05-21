@@ -56,8 +56,8 @@ def register():
     try:
         Session.commit()
     except Exception as e:
-        Session.rollback()
         logger.exception("Error creating user!!")
+        Session.rollback()
         raise InternalServerError(f"Could not create user! Error: {e}")
 
     login_user(user)
