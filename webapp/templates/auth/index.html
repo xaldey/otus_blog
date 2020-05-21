@@ -9,13 +9,13 @@
 <div class="container col-8">
   <ul class="list-group col-8">
     <li class="list-group-item">Авторизован: {{ current_user.is_authenticated }}</li>
-      {% if current_user.is_authenticated %}
-      <li class="list-group-item">Пользователь: {{ current_user.username }}</li>
-      <button class="btn btn-primary" type="submit">Выйти<a href="auth/logout/"></a></button>
-      {% endif %}
-      {% if not current_user.is_authenticated %}
-        <button class="btn btn-primary" type="submit">Войти<a href="login.html" target="_blank"></a></button>
-      {% endif %}
+    {% if current_user.is_authenticated %}
+    <li class="list-group-item">Пользователь: {{ current_user.username }}</li>
+    <a class="btn btn-outline-primary" role="button" href="/auth/logout/">Выйти</a>
+    {% endif %}
+    {% if not current_user.is_authenticated %}
+    <a class="btn btn-primary" role="button" href="/auth/login/">Войти</a>
+    {% endif %}
   </ul>
 </div>
 {% endblock %}
