@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Мой блог
+Мой блог | {{ current_user.username }}
 {% endblock %}
 
 
 {% block body %}
-<article class="article">
-    {{ post. }}
-</article>
-<article class="article">Блок для поста</article>
-<article class="article">Блок для поста</article>
-<article class="article">Блок для поста</article>
-<article class="article">Блок для поста</article>
+<article class="article">Текст поста: {{ posts }}</article>
+<article class="article">Текст поста: {{ posts }}</article>
+<article class="article">Посты (все): {{ posts_all }}</article>
+<article class="article">Блок для поста 1{{ query_posts }}</article>
+<article class="article">Блок для поста 2{{ posts }}</article>
+<article class="article">Блок для поста 2-1{{ posts }}</article>
+<article class="article">Блок для поста 3</article>
 {% endblock %}
 

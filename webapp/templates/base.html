@@ -30,19 +30,25 @@
 <div class="container-fluid">
     <!-- Nav menu -->
     <nav class="navbar sticky-top navbar-light bg-light">
-            <a class="navbar-brand" href="/">
-                <img alt="Logo" class="d-inline-block align-top" height="30" loading="lazy" src="/static/images/favicon/logo.png" width="30">
-                Обзорник
-            </a>
-            {% if current_user.is_authenticated %}
-            <h4>Привет, {{ current_user.username }}</h4>
-            <a role="button" class="btn btn-outline-primary" href="/auth/logout/">Выйти</a>
-            {% endif %}
-            {% if not current_user.is_authenticated %}
-            <h4>Привет, аноним!</h4>
-            <a class="btn btn-primary" href="/auth/login/" role="button">Войти</a>
-            {% endif %}
-    </nav>
+        <a class="navbar-brand" href="/">
+            <img alt="Logo" class="d-inline-block align-top" height="30" loading="lazy"
+                 src="/static/images/favicon/logo.png" width="30">
+            Обзорник
+        </a>
+        {% if current_user.is_authenticated %}
+        <div  class="float-sm-right">
+        <h4>Привет, {{ current_user.username }}</h4>
+
+        <a role="button" class="btn btn-outline-primary" href="/auth/logout/">Выйти</a>
+        <a role="button" class="btn btn-outline-primary" href="/add_post/">Добавить пост</a>
+        </div>
+        {% endif %}
+        {% if not current_user.is_authenticated %}
+        <h4>Привет, аноним!</h4>
+        <a class="btn btn-primary" href="/auth/login/" role="button">Войти</a>
+        {% endif %}
+
+</nav>
 </div>
     {% endblock %}
 

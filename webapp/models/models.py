@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from webapp.models.create_db import posts_tags_table, Base
 import hashlib
 from flask_login import UserMixin
+from datetime import datetime
 
 
 class User(Base, UserMixin):
@@ -39,13 +40,14 @@ class Post(Base):
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     title = Column(String(40), nullable=False)
     text = Column(Text, nullable=False)
+    timestamp = Column(String(20), index=True, default=datetime.now)
     is_published = Column(Boolean, nullable=False, default=False)
 
     user = relationship(User, back_populates='posts')
     tags = relationship('Tag', secondary=posts_tags_table, back_populates='posts')
 
     def __repr__(self):
-        return f'<Post #{self.id} by {self.user_id} {self.title}>'
+        return f'<Post #{self.id} by {self.user} {self.user_id} {self.title}. Posted: {self.timestamp}>'
 
 
 class Tag(Base):

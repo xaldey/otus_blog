@@ -1,27 +1,28 @@
-from webapp.models import Session
-from webapp.models import Post, User, Tag
+from webapp.models import Post, User, Tag, Session
 from webapp.config import DECOR
+from datetime import datetime
+
 
 
 def create_users_posts():
     session = Session()
 
-    user = User(username='otus', password='123')
+    user = User(username='otus', password='1234')
     session.add(user)
     session.flush(session)
 
     print("Создаем посты от имени пользователя: ", user)
     print('------создаем посты-----')
     post1 = Post(user_id=user.id, title='Обзор фильма "Во все тяжкие"',
-                 text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"')
+                 text='Здесь находится большой текст-описание обзора фильма "Во все тяжкие"', timestamp=datetime.now())
     post2 = Post(user_id=user.id, title='Обзор фильма "Гладиатор"',
-                 text='Здесь находится большой текст-описание обзора фильма "Гладиатор"')
+                 text='Здесь находится большой текст-описание обзора фильма "Гладиатор"', timestamp=datetime.now())
     post3 = Post(user_id=user.id, title='Обзор фильма "Терминатор"',
-                 text='Здесь находится большой текст-описание обзора фильма "Терминатор"')
+                 text='Здесь находится большой текст-описание обзора фильма "Терминатор"', timestamp=datetime.now())
     post4 = Post(user_id=user.id, title='Обзор фильма "Мишки Гамми"',
-                 text='Здесь находится большой текст-описание обзора фильма "Мишки Гамми"')
+                 text='Здесь находится большой текст-описание обзора фильма "Мишки Гамми"', timestamp=datetime.now())
     post5 = Post(user_id=user.id, title='Обзор фильма "Кремниевая долина"',
-                 text='Здесь находится большой текст-описание обзора фильма "Кремниевая долина"')
+                 text='Здесь находится большой текст-описание обзора фильма "Кремниевая долина"', timestamp=datetime.now())
     session.add(post1)
     session.add(post2)
     session.add(post3)
