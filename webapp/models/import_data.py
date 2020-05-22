@@ -1,13 +1,12 @@
 from webapp.models import Post, User, Tag, Session
 from webapp.config import DECOR
 from datetime import datetime
-
+from .create_db import Base
 
 
 def create_users_posts():
     session = Session()
-
-    user = User(username='otus', password='1234')
+    user = User(username='otus', password='123456')
     session.add(user)
     session.flush(session)
 
@@ -28,10 +27,9 @@ def create_users_posts():
     session.add(post3)
     session.add(post4)
     session.add(post5)
-
+    create_start_tags()
     session.commit()
     session.close()
-    create_start_tags()
 
 
 def create_start_tags():
