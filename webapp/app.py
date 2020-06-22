@@ -1,11 +1,12 @@
 from flask import Flask, render_template
 from flask_login import LoginManager
-
+from flask_bootstrap import Bootstrap
 from webapp.models import Session, User
 from webapp.views import auth_blueprint, blog_blueprint
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
+bootstrap = Bootstrap(app)
 
 
 app.register_blueprint(auth_blueprint, url_prefix="/auth")
