@@ -5,9 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 
 from webapp.models import Session, User
-
 auth_blueprint = Blueprint("auth", __name__)
-
 logger = getLogger(__name__)
 
 

@@ -4,8 +4,9 @@
 Мой блог | {{ current_user.username }}
 {% endblock %}
 
-
 {% block body %}
+<div class="container col-8">
+<h2>Вывод всех постов:</h2>
 <article class="article">Текст поста: {{ posts }}</article>
 <article class="article">Текст поста: {{ posts }}</article>
 <article class="article">Посты (все): {{ posts_all }}</article>
@@ -13,5 +14,12 @@
 <article class="article">Блок для поста 2{{ posts }}</article>
 <article class="article">Блок для поста 2-1{{ posts }}</article>
 <article class="article">Блок для поста 3</article>
+<br>
+<div class="time">
+<div>Локальное время: {{ moment(current_time).format('LLL') }}</div>
+<div>Это было {{ moment(current_time).fromNow(refresh=True) }}</div>
+</div>
+</div>
+
 {% endblock %}
 

@@ -2,12 +2,11 @@ from logging import getLogger
 from werkzeug.exceptions import BadRequest, InternalServerError
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user, login_required
+from datetime import datetime
 
 
 from webapp.models import Session, User, Post, Tag
-
 blog_blueprint = Blueprint("/", __name__)
-
 logger = getLogger(__name__)
 
 
@@ -43,7 +42,7 @@ def show_posts_without_tags():
 def index():
     show_posts_without_tags()
     return render_template("blog/index.html", user=current_user, post_wo_tags=show_posts_without_tags(),
-                           posts_all=show_posts_and_tags())
+                           posts_all=show_posts_and_tags(), current_time=datetime.utcnow())
 
 
 @blog_blueprint.route("/add_post", endpoint="add_post")
