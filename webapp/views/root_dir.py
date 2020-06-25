@@ -3,11 +3,19 @@ from werkzeug.exceptions import BadRequest, InternalServerError
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user, login_required
 from datetime import datetime
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
 
 from webapp.models import Session, User, Post, Tag
 blog_blueprint = Blueprint("/", __name__)
 logger = getLogger(__name__)
+
+
+class NameForm(FlaskForm):
+    name = StringField('Как к вам обращаться?', validators=[DataRequired()])
+    submit = SubmitField('Отправить')
 
 
 def show_posts_and_tags():
@@ -38,10 +46,15 @@ def show_posts_without_tags():
     session.close()
 
 
-@blog_blueprint.route("/", endpoint="index")
+@blog_blueprint.route("/", methods=['GET', 'POST'], endpoint="index")
 def index():
+    name = None
+    form = NameForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ''
     show_posts_without_tags()
-    return render_template("blog/index.html", user=current_user, post_wo_tags=show_posts_without_tags(),
+    return render_template("blog/index.html", form=form, name=name, user=current_user, post_wo_tags=show_posts_without_tags(),
                            posts_all=show_posts_and_tags(), current_time=datetime.utcnow())
 
 

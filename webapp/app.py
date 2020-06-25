@@ -6,6 +6,7 @@ from webapp.views import auth_blueprint, blog_blueprint
 from flask_moment import Moment
 
 
+
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 bootstrap = Bootstrap(app)

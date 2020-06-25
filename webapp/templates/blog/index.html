@@ -1,11 +1,14 @@
 {% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}
-Мой блог | {{ current_user.username }}
-{% endblock %}
+{% block title %}Мой блог | {{ current_user.username }}{% endblock %}
 
 {% block body %}
+<div class="container page-header col-4">
+    <h1>Привет, {% if name %}{{ name }}{% else %} Незнакомец{% endif %}!</h1>
+</div>
 <div class="container col-8">
+{{ wtf.quick_form(form) }}
 <h2>Вывод всех постов:</h2>
 <article class="article">Текст поста: {{ posts }}</article>
 <article class="article">Текст поста: {{ posts }}</article>
@@ -15,11 +18,10 @@
 <article class="article">Блок для поста 2-1{{ posts }}</article>
 <article class="article">Блок для поста 3</article>
 <br>
-<div class="time">
+<div class="container col-6">
 <div>Локальное время: {{ moment(current_time).format('LLL') }}</div>
 <div>Это было {{ moment(current_time).fromNow(refresh=True) }}</div>
 </div>
 </div>
-
 {% endblock %}
 

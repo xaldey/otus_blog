@@ -1,79 +1,84 @@
-{% block head %}
-{{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static', filename='../static/images/favicon/favicon.ico') }}" type="image/x-icon">
-<link rel="icon" href="{{ url_for('static', filename='../static/images/favicon/favicon.ico') }}" type="image/x-icon">
-{% endblock %}
+<html>
+<head>
+    {% block head %}
+    {{ super() }}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='../static/images/favicon/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='../static/images/favicon/favicon.ico') }}" type="image/x-icon">
+    {% endblock %}
 
-{% block title %}
-Base title
-{% endblock %}
-
-{% block navbar %}
-<div class="navbar navbar-inverse" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle"
-                    data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Сменить навигацию</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">
-                <img alt="Logo" class="d-inline-block align-top" height="30" loading="lazy"
-                     src="/static/images/favicon/logo.png" width="30">
-                Обзорник
-            </a>
+    {% block title %}
+    Base title
+    {% endblock %}
+</head>
+<body>
+    {% block navbar %}
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle"
+                        data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Сменить навигацию</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <img alt="Logo" class="d-inline-block align-top" height="30" loading="lazy"
+                         src="/static/images/favicon/logo.png" width="30">
+                    Обзорник
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Главная</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
+        {% if current_user.is_authenticated %}
+        <div  class="float-sm-right">
+            <h4>Привет, {{ current_user.username }}</h4>
+            <a role="button" class="btn btn-outline-primary" href="/auth/logout/">Выйти</a>
+            <a role="button" class="btn btn-outline-primary" href="/add_post/">Добавить пост</a>
+        </div>
+        {% endif %}
+        {% if not current_user.is_authenticated %}
+        <h4>Привет, аноним!</h4>
+        <a class="btn btn-primary" href="/auth/login/" role="button">Войти</a>
+        {% endif %}
+    </div>
+    {% endblock %}
+
+    {% block body %}
+    BLOCK of BODY
+    {% endblock %}
+
+
+    {% block footer %}
+    <!-- Footer Start -->
+    <footer class="container">
+    <nav class="navbar fixed-bottom navbar-light bg-light">
+        <div class="col-2">
+            <p>© Copyright 2020 | Мой блог</p>
+        </div>
+        <div>
+            <ul>
                 <li><a href="/">Главная</a></li>
+                <li><a href="single_post.html">Случайный пост</a></li>
+                <li><a href="contact.html">Контакты</a></li>
             </ul>
         </div>
-    </div>
-    {% if current_user.is_authenticated %}
-    <div  class="float-sm-right">
-        <h4>Привет, {{ current_user.username }}</h4>
-        <a role="button" class="btn btn-outline-primary" href="/auth/logout/">Выйти</a>
-        <a role="button" class="btn btn-outline-primary" href="/add_post/">Добавить пост</a>
-    </div>
-    {% endif %}
-    {% if not current_user.is_authenticated %}
-    <h4>Привет, аноним!</h4>
-    <a class="btn btn-primary" href="/auth/login/" role="button">Войти</a>
-    {% endif %}
-</div>
-{% endblock %}
+            <!-- Credit Start -->
+        <p class="col-2">Обучение в <a href="https://otus.ru/learning/" target="_blank">Otus</a></p>
+            <!-- Credit End -->
+    </nav>
+    </footer>
+    <!-- Footer End -->
+    {% endblock %}
 
-{% block body %}
-BLOCK of BODY
-{% endblock %}
-
-
-{% block footer %}
-<!-- Footer Start -->
-<footer class="container">
-<nav class="navbar fixed-bottom navbar-light bg-light">
-    <div class="col-2">
-        <p>© Copyright 2020 | Мой блог</p>
-    </div>
-    <div>
-        <ul>
-            <li><a href="/">Главная</a></li>
-            <li><a href="single_post.html">Случайный пост</a></li>
-            <li><a href="contact.html">Контакты</a></li>
-        </ul>
-    </div>
-        <!-- Credit Start -->
-    <p class="col-2">Обучение в <a href="https://otus.ru/learning/" target="_blank">Otus</a></p>
-        <!-- Credit End -->
-</nav>
-</footer>
-<!-- Footer End -->
-{% endblock %}
-
-{% block scripts %}
-{{ super() }}
-{{ moment.include_moment() }}
-{{ moment.locale('ru') }}
-{% endblock %}
+    {% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+    {{ moment.locale('ru') }}
+    {% endblock %}
+</body>
+</html>
