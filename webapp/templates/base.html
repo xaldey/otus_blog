@@ -12,40 +12,35 @@
 
 
 {% block navbar %}
-<div class="navbar navbar" role="navigation">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle"
-                    data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Сменить навигацию</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">
-                <img alt="Logo" class="d-inline-block align-top" height="30" loading="lazy"
-                     src="/static/images/favicon/logo.png" width="30">
-                Обзорник
-            </a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="/">Главная</a></li>
+        <a class="navbar-brand" href="/">Обзорник</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Меню
+                    </a>
+                    <div class="dropdown-menu">
+                        {% if current_user.is_authenticated %}
+                        <a class="nav-link dropdown-toggle"> Привет, {{ current_user.username }}</a>
+                        <a class="nav-link dropdown-toggle" href="/add_post/">Добавить пост</a>
+                        <a class="nav-link dropdown-toggle" href="/auth/logout/">Выйти</a>
+                        {% endif %}
+                        {% if not current_user.is_authenticated %}
+                        <a class="nav-link dropdown-toggle">Привет, аноним!</a>
+                        <a class="nav-link dropdown-toggle" href="/auth/login/">Войти</a>
+                        {% endif %}
+                    </div>
             </ul>
         </div>
-    </div>
-    {% if current_user.is_authenticated %}
-    <div  class="float-sm-right">
-        <h4>Привет, {{ current_user.username }}</h4>
-        <a role="button" class="btn btn-outline-primary" href="/auth/logout/">Выйти</a>
-        <a role="button" class="btn btn-outline-primary" href="/add_post/">Добавить пост</a>
-    </div>
-    {% endif %}
-    {% if not current_user.is_authenticated %}
-    <h4>Привет, аноним!</h4>
-    <a class="btn btn-primary" href="/auth/login/" role="button">Войти</a>
-    {% endif %}
-</div>
+</nav>
 {% endblock %}
 
 {% block content %}
@@ -56,23 +51,21 @@
 
 {% block footer %}
     <!-- Footer Start -->
-    <footer class="container">
-    <nav class="navbar fixed-bottom navbar-light bg-light">
-        <div class="col-2">
-            <p>© Copyright 2020 | Мой блог</p>
-        </div>
-        <div>
-            <ul>
-                <li><a href="/">Главная</a></li>
-                <li><a href="single_post.html">Случайный пост</a></li>
-                <li><a href="contact.html">Контакты</a></li>
-            </ul>
-        </div>
-            <!-- Credit Start -->
-        <p class="col-2">Обучение в <a href="https://otus.ru/learning/" target="_blank">Otus</a></p>
-            <!-- Credit End -->
-    </nav>
-    </footer>
+<nav class="navbar fixed-bottom navbar-light bg-light">
+    <div class="col-2">
+        <p>© Copyright 2020 | Мой блог</p>
+    </div>
+    <div>
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="single_post.html">Случайный пост</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+        </ul>
+    </div>
+        <!-- Credit Start -->
+    <p class="col-2">Обучение в <a href="https://otus.ru/learning/" target="_blank">Otus</a></p>
+    <!-- Credit End -->
+</nav>
     <!-- Footer End -->
 {% endblock %}
 
