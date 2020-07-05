@@ -1,9 +1,10 @@
 from sqlalchemy import create_engine, Column, Integer, ForeignKey, Table
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from webapp.config import SQLALCHEMY_DATABASE_URI
 
 
-engine = create_engine('sqlite:///myapp_myblog.db')
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 

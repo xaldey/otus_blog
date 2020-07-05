@@ -91,4 +91,4 @@ def logout():
 @auth_blueprint.route("/protected/", endpoint="protected")
 @login_required
 def protected():
-    return "!!!Это видно только залогиненным пользователям!!!"
+    return "<h1>!!!Это видно только залогиненным пользователям!!!</h1>"

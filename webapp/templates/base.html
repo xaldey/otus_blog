@@ -31,11 +31,13 @@
                         {% if current_user.is_authenticated %}
                         <p class="nav-link dropdown-toggle"> Привет, {{ current_user.username }}</p>
                         <a class="nav-link dropdown-toggle" href="/add_post/">Добавить пост</a>
+                        <a class="nav-link dropdown-toggle" href="/auth/protected">Закрытая страница</a>
                         <a class="nav-link dropdown-toggle" href="/auth/logout/">Выйти</a>
                         {% endif %}
                         {% if not current_user.is_authenticated %}
                         <p class="nav-link dropdown-toggle">Привет, аноним!</p>
                         <a class="nav-link dropdown-toggle" href="/auth/login/">Войти</a>
+                        <a class="nav-link dropdown-toggle" href="/auth/register/">Зарегистрироваться</a>
                         {% endif %}
                     </div>
             </ul>
