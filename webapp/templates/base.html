@@ -6,8 +6,8 @@
 
 {% block head %}
 {{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static', filename='static/images/favicon/favicon.ico') }}" type="image/x-icon">
-<link rel="icon" href="{{ url_for('static', filename='static/images/favicon/favicon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 {% endblock %}
 
 
@@ -29,12 +29,12 @@
                     </a>
                     <div class="dropdown-menu">
                         {% if current_user.is_authenticated %}
-                        <a class="nav-link dropdown-toggle"> Привет, {{ current_user.username }}</a>
+                        <p class="nav-link dropdown-toggle"> Привет, {{ current_user.username }}</p>
                         <a class="nav-link dropdown-toggle" href="/add_post/">Добавить пост</a>
                         <a class="nav-link dropdown-toggle" href="/auth/logout/">Выйти</a>
                         {% endif %}
                         {% if not current_user.is_authenticated %}
-                        <a class="nav-link dropdown-toggle">Привет, аноним!</a>
+                        <p class="nav-link dropdown-toggle">Привет, аноним!</p>
                         <a class="nav-link dropdown-toggle" href="/auth/login/">Войти</a>
                         {% endif %}
                     </div>
