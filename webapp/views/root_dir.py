@@ -1,6 +1,6 @@
 from logging import getLogger
 from werkzeug.exceptions import BadRequest, InternalServerError
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from flask_login import current_user, login_required
 from datetime import datetime
 from flask_wtf import FlaskForm
@@ -48,13 +48,15 @@ def show_posts_without_tags():
 
 @blog_blueprint.route("/", methods=['GET', 'POST'], endpoint="index")
 def index():
-    name = None
     form = NameForm()
     if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ''
+        old_name = session.get('name')
+        if old_name is not None and old_name != form.name.data:
+            flash('Похоже, вы сменили имя?')
+        session['name'] = form.name.data
+        return redirect(url_for('.index'))
     show_posts_without_tags()
-    return render_template("blog/index.html", form=form, name=name, user=current_user, post_wo_tags=show_posts_without_tags(),
+    return render_template("blog/index.html", form=form, name=session.get('name'), user=current_user, post_wo_tags=show_posts_without_tags(),
                            posts_all=show_posts_and_tags(), current_time=datetime.utcnow())
 
 
