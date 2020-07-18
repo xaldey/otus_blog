@@ -85,7 +85,7 @@ def login():
 @auth_blueprint.route("/logout/", endpoint="logout")
 def logout():
     logout_user()
-    return redirect(url_for("auth.login"))
+    return redirect(url_for("/"))
 
 
 @auth_blueprint.route("/protected/", endpoint="protected")

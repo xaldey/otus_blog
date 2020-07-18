@@ -65,6 +65,11 @@ def add_post():
     return render_template("add_post.html", user=current_user)
 
 
+@blog_blueprint.route("/about/", endpoint="about")
+def about():
+    return render_template("blog/about.html")
+
+
 @blog_blueprint.route("/login", endpoint="login")
 def login():
     return render_template("auth/login.html")
