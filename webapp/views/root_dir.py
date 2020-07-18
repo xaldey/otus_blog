@@ -62,7 +62,7 @@ def index():
 
 @blog_blueprint.route("/add_post", endpoint="add_post")
 def add_post():
-    return render_template("add_post.html", user=current_user)
+    return render_template("blog/add_post.html", user=current_user)
 
 
 @blog_blueprint.route("/about/", endpoint="about")
