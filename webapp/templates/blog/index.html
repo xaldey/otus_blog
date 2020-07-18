@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% from "bootstrap/form.html" import render_form, render_field %}
 
-{% block title %}Мой блог | {{ current_user.username }}{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
     <div class="container page-header col-8">
         <h1>Привет, {% if name %}{{ name }}{% else %} Незнакомец{% endif %}!</h1>
     </div>
     <div class="container">
-        {{ wtf.quick_form(form) }}
+        {{ render_form(form) }}
         <br>
         <div class="alert alert-warning">
             <p>Локальное время: {{ moment(current_time).format('LLL') }}</p>
@@ -26,4 +26,11 @@
             <article class="article">Блок для поста 3</article>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_jquery() }}
+    {{ moment.include_moment() }}
+    {{ moment.locale('ru') }}
 {% endblock %}
