@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% from "bootstrap/form.html" import render_form, render_field %}
+
+{% block title %}
+Добавить обзор
+{% endblock %}
+
+{% block content %}
+
+{{ render_form(form) }}
+<!-- Page Header -->
+    <header class="masthead" style="background-image: url('{{ url_for('static', filename='post-bg.jpg') }}')">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="page-heading">
+              <h1>Написать пост</h1>
+              <span class="subheading">Вы можете здесь оставить заметку.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <form name="addForm" id="addForm" method="POST" action="{{ url_for('addpost') }}" novalidate>
+            <div class="control-group">
+              <div class="form-group floating-label-form-group controls">
+                <label>Заголовок</label>
+                <input type="text" class="form-control" placeholder="Заголовок" name="title" id="title" required data-validation-required-message="Укажите заголовок новости.">
+                <p class="help-block text-danger"></p>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="form-group col-xs-12 floating-label-form-group controls">
+                <label>Автор</label>
+                <input type="text" class="form-control" placeholder="Автор" name="author" id="author" required data-validation-required-message="Укажите автора новости.">
+                <p class="help-block text-danger"></p>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="form-group floating-label-form-group controls">
+                <label>Содержимое обзора</label>
+                <textarea rows="5" class="form-control" placeholder="Текст обзора" name="content" id="content" required data-validation-required-message="Введите текст обзора"></textarea>
+                <p class="help-block text-danger"></p>
+              </div>
+            </div>
+            <br>
+            <div id="success"></div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-secondary" id="sendMessageButton">Опубликовать</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+{% endblock %}

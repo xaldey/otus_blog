@@ -35,15 +35,14 @@
                 <a class="nav-item nav-link active" href="/">Главная <span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link" href="/about/">О нас</a>
                 {% if current_user.is_authenticated %}
-                <a class="nav-item nav-link" href="/auth/" tabindex="-1" >{{ current_user.username }}</a>
-                <a class="nav-item nav-link" href="/add_post/">Добавить пост</a>
-                <a class="nav-item nav-link" href="/auth/protected">Закрытая страница</a>
+                <a class="nav-item nav-link" href="/auth/add_post/">Добавить пост</a>
                 <a class="nav-item nav-link" href="/auth/logout/">Выйти</a>
+                <a class="nav-item nav-link" href="/auth/" tabindex="-1" >{{ current_user.username }}</a>
                 {% endif %}
                 {% if not current_user.is_authenticated %}
-                <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{ Аноним }}</a>
                 <a class="nav-item nav-link" href="/auth/login/">Войти</a>
                 <a class="nav-item nav-link" href="/auth/register/">Зарегистрироваться</a>
+                <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{ Аноним }}</a>
                 {% endif %}
             </div>
         </div>

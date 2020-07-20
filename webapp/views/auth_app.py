@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 
 
-from webapp.models import Session, User
+from webapp.models import Session, User, Post
 auth_blueprint = Blueprint("auth", __name__)
 logger = getLogger(__name__)
 
@@ -85,10 +85,19 @@ def login():
 @auth_blueprint.route("/logout/", endpoint="logout")
 def logout():
     logout_user()
-    return redirect(url_for("/"))
+    return redirect(url_for("/.about"))
 
 
-@auth_blueprint.route("/protected/", endpoint="protected")
+@auth_blueprint.route("/add_post/", endpoint="add_post", methods=['POST'])
 @login_required
-def protected():
-    return "<h1>!!!Это видно только залогиненным пользователям!!!</h1>"
+def addpost():
+    title = request.form['title']
+    user = current_user
+    text = request.form['content']
+
+    post = Post(title=title, user=user, text=text)
+
+    Session.add(post)
+    Session.commit()
+
+    return redirect(url_for('/'))
