@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% from "bootstrap/form.html" import render_form, render_field %}
+
 
 {% block title %}
 Добавить обзор
@@ -7,15 +7,13 @@
 
 {% block content %}
 
-{{ render_form(form) }}
 <!-- Page Header -->
-    <header class="masthead" style="background-image: url('{{ url_for('static', filename='post-bg.jpg') }}')">
+    <header style="background-image: url('{{ url_for('static', filename='images/blog/1.jpg') }}')">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="page-heading">
-              <h1>Написать пост</h1>
-              <span class="subheading">Вы можете здесь оставить заметку.</span>
+              <h1>Добавить обзор</h1>
             </div>
           </div>
         </div>
@@ -26,19 +24,17 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <form name="addForm" id="addForm" method="POST" action="{{ url_for('addpost') }}" novalidate>
+          <form name="addForm" id="addForm" method="POST" action="{{ url_for('auth.addpost') }}" novalidate>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Заголовок</label>
-                <input type="text" class="form-control" placeholder="Заголовок" name="title" id="title" required data-validation-required-message="Укажите заголовок новости.">
+                <input type="text" class="form-control" placeholder="Заголовок" name="title" id="title" required data-validation-required-message="Укажите заголовок обзора.">
                 <p class="help-block text-danger"></p>
               </div>
             </div>
             <div class="control-group">
               <div class="form-group col-xs-12 floating-label-form-group controls">
-                <label>Автор</label>
-                <input type="text" class="form-control" placeholder="Автор" name="author" id="author" required data-validation-required-message="Укажите автора новости.">
-                <p class="help-block text-danger"></p>
+                <label>Автор: {{ current_user.username }} </label>
               </div>
             </div>
             <div class="control-group">

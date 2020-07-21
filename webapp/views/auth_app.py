@@ -88,16 +88,22 @@ def logout():
     return redirect(url_for("/.about"))
 
 
-@auth_blueprint.route("/add_post/", endpoint="add_post", methods=['POST'])
+@auth_blueprint.route('/add/', endpoint="add")
+@login_required
+def add():
+    return render_template("auth/add.html")
+
+
+@auth_blueprint.route("/addpost", methods=['POST'])
 @login_required
 def addpost():
     title = request.form['title']
     user = current_user
-    text = request.form['content']
+    content = request.form['content']
 
-    post = Post(title=title, user=user, text=text)
+    post = Post(title=title, user=user, text=content)
 
     Session.add(post)
     Session.commit()
 
-    return redirect(url_for('/'))
+    return redirect(url_for('/.index'))
