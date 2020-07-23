@@ -10,13 +10,11 @@
 <!-- Page Header -->
     <header style="background-image: url('{{ url_for('static', filename='images/blog/1.jpg') }}')">
       <div class="container">
-        <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="page-heading">
               <h1>Добавить обзор</h1>
             </div>
           </div>
-        </div>
       </div>
     </header>
 
@@ -28,7 +26,8 @@
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Заголовок</label>
-                <input type="text" class="form-control" placeholder="Заголовок" name="title" id="title" required data-validation-required-message="Укажите заголовок обзора.">
+                <input type="text" class="form-control" placeholder="Заголовок" name="title" id="title"
+                       required data-validation-required-message="Укажите заголовок обзора.">
                 <p class="help-block text-danger"></p>
               </div>
             </div>
@@ -40,7 +39,8 @@
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Содержимое обзора</label>
-                <textarea rows="5" class="form-control" placeholder="Текст обзора" name="content" id="content" required data-validation-required-message="Введите текст обзора"></textarea>
+                <textarea rows="5" class="form-control" placeholder="Текст обзора" name="content" id="content"
+                          required data-validation-required-message="Введите текст обзора"></textarea>
                 <p class="help-block text-danger"></p>
               </div>
             </div>

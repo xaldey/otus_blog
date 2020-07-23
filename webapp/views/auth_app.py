@@ -106,4 +106,4 @@ def addpost():
     Session.add(post)
     Session.commit()
 
-    return redirect(url_for('/.index'))
+    return redirect(url_for('/'))

@@ -19,6 +19,14 @@ logger = getLogger(__name__)
 #     submit = SubmitField('Отправить')
 
 
+def show_all_posts_of_user(user):
+    session = Session()
+    query_posts = session.query(Post).filter(User.id == 2)
+    for post in query_posts:
+        return post.title, post.user
+    session.close()
+
+
 def show_posts_and_tags():
     session = Session()
     query_posts = session.query(Post)
@@ -57,14 +65,23 @@ def index():
     #         flash('Похоже, вы сменили имя?')
     #     session['name'] = form.name.data
     #     return redirect(url_for('.index'))
-    show_posts_without_tags()
+    # show_posts_without_tags()
     return render_template("blog/index.html", user=current_user, post_wo_tags=show_posts_without_tags(),
-                           posts_all=show_posts_and_tags(), current_time=datetime.utcnow())
+                           posts_all=show_posts_and_tags(), posts_of_user=show_all_posts_of_user(current_user),
+                           current_time=datetime.utcnow())
 
 
 @blog_blueprint.route("/about/", endpoint="about")
 def about():
     return render_template("blog/about.html")
+
+
+@blog_blueprint.route("/post/<int:id>")
+def post(id):
+    session = Session()
+    query_post = session.query(Post)
+    post = query_post.filter_by(id=id).one()
+    return render_template('blog/post.html', post=post)
 
 
 @blog_blueprint.route("/login", endpoint="login")

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Обзорник | {{ current_user.username }} {% endblock %}
+{% block title %}Обзорник | {% if current_user.username %}{{ current_user.username }}{% else %} Незнакомец{% endif %} {% endblock %}
 
 {% block content %}
     <div class="container page-header col-8">
@@ -15,7 +15,7 @@
         <br>
         <div class="container">
         <h2>Вывод всех постов:</h2>
-            <article class="article">Текст поста: {{ posts_all }}</article>
+            <article class="article">Текст поста: {{ posts_of_user }}</article>
             <article class="article">Текст поста: {{ query_posts }}</article>
             <article class="article">Посты (все): {{ posts_all }}</article>
             <article class="article">Блок для поста 1{{ query_posts }}</article>
