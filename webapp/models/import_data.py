@@ -6,7 +6,7 @@ from .create_db import Base
 
 def create_users_posts():
     session = Session()
-    user = User(username='otus', password='123456')
+    user = User(username='otus', password='12345678')
     session.add(user)
     session.flush(session)
 

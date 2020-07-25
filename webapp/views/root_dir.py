@@ -59,9 +59,7 @@ def show_posts_without_tags():
 def index():
     session = Session()
     all_posts = session.query(Post).all()
-    return render_template("blog/index.html", posts=all_posts, user=current_user, post_wo_tags=show_posts_without_tags(),
-                           posts_all=show_posts_and_tags(), posts_of_user=show_all_posts_of_user(current_user),
-                           current_time=datetime.utcnow())
+    return render_template("blog/index.html", posts=all_posts, user=current_user, current_time=datetime.utcnow())
 
 
 @blog_blueprint.route("/about/", endpoint="about")

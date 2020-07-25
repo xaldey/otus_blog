@@ -12,7 +12,7 @@ logger = getLogger(__name__)
 @auth_blueprint.route("/", endpoint="index")
 def index():
     session = Session()
-    query_posts = session.query(Post).filter(Post.user == current_user.username)
+    query_posts = session.query(Post).filter_by(user_id=current_user.id).all()
 
     return render_template("auth/index.html", user=current_user, posts=query_posts)
 
