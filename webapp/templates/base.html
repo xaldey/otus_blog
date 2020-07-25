@@ -2,8 +2,8 @@
 <html lang="ru">
     <head>
         {% block head %}
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon/favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon/favicon.ico') }}" type="image/x-icon">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -13,9 +13,7 @@
         {% endblock %}
 
         <title>
-            {% block title %}
-                Base title
-            {% endblock %}
+            {% block title %}Base title{% endblock %}
         </title>
         {% endblock %}
     </head>
@@ -25,8 +23,8 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/">
-            <img src="static/images/favicon/logo.png" width="30" height="30"
-                 class="d-inline-block align-top" alt="" loading="lazy">
+            <img src="{{ url_for('static', filename='images/favicon/logo.png') }}" width="30" height="30"
+                 class="d-inline-block align-top" alt="Logotype image" loading="lazy">
             Обзорник</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">

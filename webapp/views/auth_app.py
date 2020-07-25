@@ -11,7 +11,10 @@ logger = getLogger(__name__)
 
 @auth_blueprint.route("/", endpoint="index")
 def index():
-    return render_template("auth/index.html", user=current_user)
+    session = Session()
+    query_posts = session.query(Post).filter(Post.user == current_user.username)
+
+    return render_template("auth/index.html", user=current_user, posts=query_posts)
 
 
 def validate_data(username, password):

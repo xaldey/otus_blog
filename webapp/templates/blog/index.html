@@ -15,13 +15,15 @@
         <br>
         <div class="container">
         <h2>Вывод всех постов:</h2>
-            <article class="article">Текст поста: {{ posts_of_user }}</article>
-            <article class="article">Текст поста: {{ query_posts }}</article>
-            <article class="article">Посты (все): {{ posts_all }}</article>
-            <article class="article">Блок для поста 1{{ query_posts }}</article>
-            <article class="article">Блок для поста 2{{ show_posts_without_tags }}</article>
-            <article class="article">Блок для поста 2-1{{ posts }}</article>
-            <article class="article">Блок для поста 3</article>
+            {% for post in posts %}
+            <div class="container">
+                <h3>{{ post.title }}</h3>
+                <h4>ID of post: {{ post.id }}</h4>
+                <h5>Написан: {{ post.timestamp }}</h5>
+            </div>
+            <hr>
+            {% endfor %}
+            <hr>
         </div>
     </div>
 {% endblock %}

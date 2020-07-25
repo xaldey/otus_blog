@@ -57,16 +57,9 @@ def show_posts_without_tags():
 
 @blog_blueprint.route("/", methods=['GET', 'POST'], endpoint="index")
 def index():
-    # Убрал форму с главной страницы за ненадобностью
-    # form = NameForm()
-    # if form.validate_on_submit():
-    #     old_name = session.get('name')
-    #     if old_name is not None and old_name != form.name.data:
-    #         flash('Похоже, вы сменили имя?')
-    #     session['name'] = form.name.data
-    #     return redirect(url_for('.index'))
-    # show_posts_without_tags()
-    return render_template("blog/index.html", user=current_user, post_wo_tags=show_posts_without_tags(),
+    session = Session()
+    all_posts = session.query(Post).all()
+    return render_template("blog/index.html", posts=all_posts, user=current_user, post_wo_tags=show_posts_without_tags(),
                            posts_all=show_posts_and_tags(), posts_of_user=show_all_posts_of_user(current_user),
                            current_time=datetime.utcnow())
 
