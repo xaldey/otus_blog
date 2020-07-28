@@ -13,12 +13,14 @@
             <p>Это было {{ moment(current_time).fromNow(refresh=True) }}</p>
         </div>
         <br>
-        <div class="container">
+        <div class="container pb-4">
         <h2>Вывод всех постов:</h2>
             {% for post in posts %}
             <div class="container">
-                <h3>{{ post.title }}</h3>
-                <h4>ID of post: {{ post.id }}</h4>
+                <a href=post/{{ post.id }}>
+                    <h3>{{ post.title }}</h3>
+                    <h4>Автор: {{ post.user.username }}</h4>
+                </a>
                 <h5>Написан: {{ post.timestamp }}</h5>
             </div>
             <hr>
