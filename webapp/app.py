@@ -4,7 +4,6 @@ from flask_bootstrap import Bootstrap
 from webapp.models import Session, User
 from webapp.views import auth_blueprint, blog_blueprint
 from flask_moment import Moment
-from webapp.config import basedir
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -26,11 +25,6 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     return Session.query(User).filter_by(id=user_id).one_or_none()
-
-#
-# @app.route("/")
-# def index():
-#     return render_template("blog/index.html")
 
 
 @app.teardown_request
