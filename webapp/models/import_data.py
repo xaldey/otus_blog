@@ -1,7 +1,6 @@
 from webapp.models import Post, User, Tag, Session
 from webapp.config import DECOR
 from datetime import datetime
-from .create_db import Base
 
 
 def create_users_posts():

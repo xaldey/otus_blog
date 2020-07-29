@@ -1,22 +1,12 @@
 from logging import getLogger
-from werkzeug.exceptions import BadRequest, InternalServerError
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template
 from flask_login import current_user, login_required
 from datetime import datetime
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
 
 
 from webapp.models import Session, User, Post, Tag
 blog_blueprint = Blueprint("/", __name__)
 logger = getLogger(__name__)
-
-
-# Убрал за ненадобностью
-# class NameForm(FlaskForm):
-#     name = StringField('Как к вам обращаться?', validators=[DataRequired()])
-#     submit = SubmitField('Отправить')
 
 
 def show_all_posts_of_user(user):
@@ -42,7 +32,6 @@ def show_posts_and_tags():
 def show_posts_without_tags():
     session = Session()
     query_posts = session.query(Post)
-    # query_tags = session.query(Tag)
     query_posts = query_posts.all()
     print("Вывести все посты без тегов:")
     return query_posts
